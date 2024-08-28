@@ -706,3 +706,44 @@ You may notice the method's are apparently identical to the `Room` class methods
 </p>
 </details>    
 
+
+
+## **The `main.py` file**
+### The `main()`
+```python
+from kairos_packages.room_cls import Simple_Room, Double_Room, Twin_Room, Family_Room
+from kairos_packages.hotel_cls import Hotel
+
+def main():
+    print("\t""-------------------""\n""\t""KAIROS HOTEL SYSTEM""\n""\t""-------------------")
+    while True:
+        program = int(input("\n""         OPTIONS                 TO DO" "\n"
+                            "Current Status of the Hotel     press 1" "\n"
+                            "Complete Status of the Hotel    press 2" "\n"
+                            "Check Room Status               press 3" "\n"
+                            "Specific Tasks                  press 4" "\n"
+                            "End the Day                     press 5" "\n"
+                            "Exit                            press 0" "\n"
+                            "\t""\t""\t""\t"" -->  "))
+
+        if program == 0: break    
+
+        elif program == 1:    
+            KAIROS.get_current_status()
+
+        elif program == 2:           
+            KAIROS.get_complete_status()
+                
+        elif program == 3:          
+            KAIROS.sunrise_protocol()
+
+        elif program == 4:            
+            KAIROS.noon_protocol()
+
+        elif program == 5:         
+            KAIROS.sunset_protocol()
+
+if __name__ == "__main__": 
+    main()
+```
+A very simple file, with a `while` loop, that allows to interact continuously with `program` `int(input())`, it has the "main menu" as the argument"
