@@ -20,11 +20,11 @@ class Room():
         self.after_status = room_data[5]
         self.after_endline = room_data[6]
 ```
-As we can see, `Room`'s `__init__`  is represented by `room_data`, a `list`, this is designed like that because: by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Room in this project:
+As we can see, `Room`'s `__init__`  is represented by `room_data`, a `list`, this is designed like that because by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Room in this project:
 
 | `Room.room_data` index | `self.` Attribute | Description |
 | ------------ | ------------ | ------------ |
-| `room_data[0]` | `room_name` | A `str` name given by the owner |
+| `room_data[0]` | `room_name` | A `str` that identifies the room |
 | `room_data[1]` | `current_status` | An `int` that represents the current "activity" of the room |
 | `room_data[2]` | `current_endline` | An `int` that represent the current "activity" days left to end |
 | `room_data[3]` | `next_status` | An `int` that represents the "next activity" of the room |
@@ -32,7 +32,7 @@ As we can see, `Room`'s `__init__`  is represented by `room_data`, a `list`, thi
 | `room_data[5]` | `after_status` | An `int` that represents the "after activity" of the room |
 | `room_data[6]` | `after_endline` | An `int` that represent the "after activity" days left to end |
 
-You may notice the "An `int` that represents the activity of the room" quotes, that refers to one of the atributes those are independent of `room_data`:
+You may notice the "An `int` that represents the activity of the room" quote, that refers to one of the atributes those are independent of `room_data`:
 
 ```python
 self.states = ("NOINFO", "AVAILABLE", "RESERVED", "OCCUPIED", "CLEANING", "MAINTENANCE", "DISABLED")
@@ -52,7 +52,7 @@ Let's see:
 | `states` | All three `_status` attributes refers to the `self.states` index. |
 | `update_board` | Used in the methods those modifies `_status` and `_endline` attributes. |
 | `schedule_message` |Used in the methods those modifies `_status` and `_endline` attributes. |
-| `slowdown` | An artificial delay for the methods execution for testing quality purposes. |
+| `slowdown` | An artificial delay in the methods execution for testing quality purposes. |
 
 ### The `Room` Methods
 ```python
@@ -106,7 +106,7 @@ def sunset_protocol(self) -> None:
 ```
 **The complete code is below:**
 
-`get_current_status(self)`
+- `get_current_status(self)`
 <details><summary>Details</summary>
 <p>
   
@@ -120,7 +120,7 @@ def sunset_protocol(self) -> None:
 </details>
 
 
-`get_current_status(self)`
+- `get_complete_status(self)`
 <details><summary>Details</summary>
 <p>
   
@@ -134,7 +134,7 @@ def sunset_protocol(self) -> None:
 </details>
 
 
-`get_current_status(self)`
+- `sunrise_protocol(self)`
 <details><summary>Details</summary>
 <p>
   
@@ -205,7 +205,7 @@ def sunset_protocol(self) -> None:
 </details>
 
 
-`scheduling_conditions(self, option)`
+- `scheduling_conditions(self, option)`
 <details><summary>Details</summary>
 <p>
   
@@ -251,7 +251,7 @@ def sunset_protocol(self) -> None:
 </details>
 
 
-`scheduling_data(self, option)`
+- `scheduling_data(self, option)`
 <details><summary>Details</summary>
 <p>
   
@@ -321,7 +321,7 @@ def sunset_protocol(self) -> None:
 </details>
 
 
-`scheduling_protocol(self, option)`
+- `scheduling_protocol(self, option)`
 <details><summary>Details</summary>
 <p>
   
@@ -475,14 +475,15 @@ def sunset_protocol(self) -> None:
   | `status_update` | Is the method's `str` return, modified by the conditionals |
   | `schedule_update_1` | An `int(input())`, the new `_endline` attribute value. |
   | `schedule_update_2` | An `int(input())`, the new `_endline` attribute value. |
-
+  This method returns the updating of a room `_state` as a message, based in the same conditionals used above.
+     
   This method has the structure that `scheduling_conditions()` and `scheduling_data()` used to have.
 
 </p>
 </details>
 
 
-`scheduling_protocol(self, option)`
+- `sunset_protocol(self)`
 <details><summary>Details</summary>
 <p>
   
@@ -518,3 +519,190 @@ class Family_Room(Room):
         super().__init__(room_data)
 ```
 For now are merely placeholders.
+
+
+
+## **The `Hotel` class**
+### Definition
+```python
+class Hotel():
+    def __init__(self, hotel_data: tuple[Room, ...] = ()):
+        self.hotel_data = hotel_data
+```
+Pretty simple, an `Hotel` object is composed by a `tuple` of `Room` objects by the `hotel_data` name. 
+
+### The `Hotel` Methods
+```python
+def get_current_status(self) -> None:
+    #...
+    #code
+    #... 
+
+def get_complete_status(self) -> None:
+    #...
+    #code
+    #... 
+
+def sunrise_protocol(self) -> None:
+    #...
+    #code
+    #... 
+
+def sunset_protocol(self) -> None:
+    #...
+    #code
+    #... 
+
+def noon_protocol(self) -> None:
+     #...
+    #code
+    #...
+    #more code
+    #...
+    #even more code
+    #...
+```
+You may notice the method's are apparently identical to the `Room` class methods, let's take a look to the complete code below:
+
+- `get_current_status(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def get_current_status(self) -> None:
+      print("  ROOM            STATUS")
+      for room in self.hotel_data:
+          print(room.get_current_status())
+          time.sleep(1)   
+  ```
+  That's all, it delivers the `room.get_current_status()` for each room of the Hotel!.
+  
+  `time.sleep(1)` is an artificial delay in the method execution for testing quality purposes.
+
+</p>
+</details>
+
+
+- `get_complete_status(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def get_complete_status(self) -> None:
+      print("  ROOM            CURRENT STATUS                  NEXT STATUS                   AFTER STATUS")
+      for room in self.hotel_data:
+          print(room.get_complete_status())
+          time.sleep(1)
+  ```
+  Almost the same concept as above, it delivers the `room.get_complete_status()` for each room of the Hotel.
+
+</p>
+</details>
+
+
+- `sunrise_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def sunrise_protocol(self) -> None:
+      for room in self.hotel_data:
+          print(room.sunrise_protocol())
+          time.sleep(2)
+  ```
+  This one deploys the `room.sunrise_protocol()` method for each room as a continuous read and write interaction.
+
+</p>
+</details>
+
+
+- `noon_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def noon_protocol(self) -> None:
+      option = int(input("\n""         OPTIONS                 TO DO" "\n"
+                         "Reserve a Room                  press 1" "\n"
+                         "Occupy a Room                   press 2" "\n"
+                         "Schedule a Cleaning             press 3" "\n"
+                         "Schedule a Maintenance          press 4" "\n"
+                         "Disable a Room                  press 5" "\n"
+                         "Return                          press 0" "\n"
+                         "                                  -->  "))       
+
+        if option == 0: pass
+
+        if option > 0:                  
+            booking_rooms = []
+            for room in self.hotel_data:
+                if room.scheduling_conditions(option) is True:
+                    booking_rooms.append(room)
+                else: pass
+
+            if len(booking_rooms) > 0:
+                print("  ROOM             INFORMATION             UNTIL      TO DO")
+                for b_room in booking_rooms:
+                    print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
+                    time.sleep(1)
+                book = int(input("Cancel                                                  press 0" "\n"
+                                "                                                       "" -->  "))
+                if book > 0 and book <= len(booking_rooms):
+                    print(booking_rooms[book - 1].scheduling_protocol(option))
+                if book == 0:
+                    pass
+
+            else: print("There are no rooms available to schedule that option.")
+  ```
+  This method integrates `room.scheduling_conditions()`, `room.scheduling_data()` and `room.scheduling_protocol()` in a interactive mess to update in a room one `_status`.
+  
+  **This is how it works:**
+  ```python
+  option = int(input("\n""         OPTIONS                 TO DO" "\n"
+                     "Reserve a Room                  press 1" "\n"
+                     "Occupy a Room                   press 2" "\n"
+                     "Schedule a Cleaning             press 3" "\n"
+                     "Schedule a Maintenance          press 4" "\n"
+                     "Disable a Room                  press 5" "\n"
+                     "Return                          press 0" "\n"
+                     "                                  -->  "))       
+  ```
+  `option` is a `int(input())` with a whole options menu as a argument.
+
+  ```python
+  if option == 0: pass    
+  ```
+  `option == 0` exits the "options menu interface" and goes back to the "main menu interface", we will see it in the `main` file section.
+  
+  ```python
+  if option > 0:                 
+      booking_rooms = []
+      for room in self.hotel_data:
+      if room.scheduling_conditions(option) is True:
+          booking_rooms.append(room)
+      else: pass  
+  ```
+  `booking_rooms` is a `list` composed by the `Room` objects which `scheduling_conditions(option)` is `True`, those are, the rooms that can be scheduled in the status chosen by the user. 
+
+  ```python
+  if len(booking_rooms) > 0:
+      print("  ROOM             INFORMATION             UNTIL      TO DO")
+      for b_room in booking_rooms:
+          print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
+          time.sleep(1)
+  ```
+  This section checks if `booking_rooms` has elements and shows the information provided by `room.scheduling_data(option)` as a options menu of the rooms those can be scheduled.
+
+  ```python
+  book = int(input("Cancel                                                  press 0" "\n"
+                   "                                                       "" -->  "))
+      if book > 0 and book <= len(booking_rooms):
+          print(booking_rooms[book - 1].scheduling_protocol(option))
+      if book == 0:
+          pass
+  ```
+  `book` is the `int(input())` used to "choose" the room to schedule, consequently, shows the `_state` updating information provided by `room.scheduling_protocol(option)` for the chosen room.
+  
+</p>
+</details>    
+
