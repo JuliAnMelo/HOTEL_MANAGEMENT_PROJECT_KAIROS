@@ -2,6 +2,90 @@
 ## Concept
 The idea raises by looking for a OOP application, an aplication with an emphasis on information management and that it was motivating for the Python coding.
 This hotel idea has a focus on representing the room management concept, being represented with predetermined variables, which are condensated in the Python classes designed for that: `Room` and `Hotel`
+## Class Diagram
+```mermaid
+classDiagram
+    class Person {
+        +str person_name
+        +str person_id
+        +str person_phone
+        +str person_email
+    }
+
+    class Guest {
+        +to_dict() dict
+        +from_dict(cls, data) Guest
+    }
+
+    class Employee {
+        +to_dict() dict
+        +from_dict(cls, data) Employee
+    }
+
+    Person <|-- Guest
+    Person <|-- Employee
+
+    class Room {
+        +str room_name
+        +int current_status
+        +int current_endline
+        +int next_status
+        +int next_endline
+        +int after_status
+        +int after_endline
+        +tuple states
+        +str update_board
+        +str schedule_message
+        +str slowdown
+        +to_dict() dict
+        +from_dict(cls, data_dict) Room
+        +get_current_status() str
+        +get_complete_status() str
+        +sunrise_protocol() str
+        +scheduling_conditions(option: int) bool
+        +scheduling_data(option: int) str
+        +scheduling_protocol(option: int) str
+        +sunset_protocol() None
+    }
+
+    class Simple_Room {
+        +to_dict() dict
+    }
+
+    class Double_Room {
+        +to_dict() dict
+    }
+
+    class Twin_Room {
+        +to_dict() dict
+    }
+
+    class Family_Room {
+        +to_dict() dict
+    }
+
+    Room <|-- Simple_Room
+    Room <|-- Double_Room
+    Room <|-- Twin_Room
+    Room <|-- Family_Room
+
+    class Hotel {
+        +tuple[Room] hotel_data
+        +dict[Person] employees
+        +dict[Guest] guests
+        +to_dict() dict
+        +from_dict(cls, data_dict) Hotel
+        +get_current_status() None
+        +get_complete_status() None
+        +sunrise_protocol() None
+        +sunset_protocol() None
+        +noon_protocol() None
+    }
+
+    Hotel "1" -- "0.." Room : contains
+    Hotel "1" -- "0.." Employee : employs
+    Hotel "1" -- "0.." Guest : hosts
+```
 
 ## **The `Room` class**
 ### Definition
