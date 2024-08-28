@@ -1,0 +1,439 @@
+{
+    "hotel_data": [
+        {
+            "room_name": "Room 101",
+            "current_status": 3,
+            "current_endline": 1,
+            "next_status": 1,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 102",
+            "current_status": 2,
+            "current_endline": 2,
+            "next_status": 3,
+            "next_endline": 3,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 103",
+            "current_status": 4,
+            "current_endline": 1,
+            "next_status": 5,
+            "next_endline": 2,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 104",
+            "current_status": 3,
+            "current_endline": 3,
+            "next_status": 2,
+            "next_endline": 1,
+            "after_status": 3,
+            "after_endline": 4,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 201",
+            "current_status": 3,
+            "current_endline": 0,
+            "next_status": 4,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 202",
+            "current_status": 5,
+            "current_endline": 2,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 203",
+            "current_status": 5,
+            "current_endline": 0,
+            "next_status": 6,
+            "next_endline": 2,
+            "after_status": 3,
+            "after_endline": 3,
+            "type": "Twin_Room"
+        },
+        {
+            "room_name": "Room 204",
+            "current_status": 0,
+            "current_endline": 0,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Twin_Room"
+        },
+        {
+            "room_name": "Room 301",
+            "current_status": 2,
+            "current_endline": 3,
+            "next_status": 3,
+            "next_endline": 3,
+            "after_status": 5,
+            "after_endline": 2,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 302",
+            "current_status": 6,
+            "current_endline": 2,
+            "next_status": 4,
+            "next_endline": 2,
+            "after_status": 1,
+            "after_endline": 1,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 303",
+            "current_status": 4,
+            "current_endline": 2,
+            "next_status": 1,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Family_Room"
+        },
+        {
+            "room_name": "Room 304",
+            "current_status": 1,
+            "current_endline": 1,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Family_Room"
+        }
+    ],
+    "employees": {
+        "NOINFO": {
+            "person_name": [
+                "NOLASTNAME",
+                "NOFIRSTNAME"
+            ],
+            "person_id": "0000000000",
+            "person_phone": "000-0000",
+            "person_email": "username@server.domain",
+            "employee_role": "NOINFO",
+            "employee_id": "E000"
+        },
+        "Receptionist": {
+            "person_name": [
+                "Garcia",
+                "Laura"
+            ],
+            "person_id": "0012345678",
+            "person_phone": "555-0101",
+            "person_email": "laura.garcia@hotel.com",
+            "employee_role": "Receptionist",
+            "employee_id": "E001"
+        },
+        "Housekeeper": {
+            "person_name": [
+                "Smith",
+                "John"
+            ],
+            "person_id": "0023456789",
+            "person_phone": "555-0202",
+            "person_email": "john.smith@hotel.com",
+            "employee_role": "Housekeeper",
+            "employee_id": "E002"
+        },
+        "Concierge": {
+            "person_name": [
+                "Doe",
+                "Jane"
+            ],
+            "person_id": "0034567890",
+            "person_phone": "555-0303",
+            "person_email": "jane.doe@hotel.com",
+            "employee_role": "Concierge",
+            "employee_id": "E003"
+        },
+        "Chef": {
+            "person_name": [
+                "Williams",
+                "Emily"
+            ],
+            "person_id": "0056789012",
+            "person_phone": "555-0505",
+            "person_email": "emily.williams@hotel.com",
+            "employee_role": "Chef",
+            "employee_id": "E004"
+        },
+        "Maintenance Worker": {
+            "person_name": [
+                "Martinez",
+                "Carlos"
+            ],
+            "person_id": "0067890123",
+            "person_phone": "555-0606",
+            "person_email": "carlos.martinez@hotel.com",
+            "employee_role": "Maintenance Worker",
+            "employee_id": "E005"
+        },
+        "General Manager": {
+            "person_name": [
+                "Davis",
+                "Kevin"
+            ],
+            "person_id": "0089012345",
+            "person_phone": "555-0808",
+            "person_email": "kevin.davis@hotel.com",
+            "employee_role": "General Manager",
+            "employee_id": "E006"
+        },
+        "Front Desk Manager": {
+            "person_name": [
+                "Rodriguez",
+                "Angela"
+            ],
+            "person_id": "0090123456",
+            "person_phone": "555-0909",
+            "person_email": "angela.rodriguez@hotel.com",
+            "employee_role": "Front Desk Manager",
+            "employee_id": "E007"
+        },
+        "Security Officer": {
+            "person_name": [
+                "Lee",
+                "Daniel"
+            ],
+            "person_id": "0101234567",
+            "person_phone": "555-1010",
+            "person_email": "daniel.lee@hotel.com",
+            "employee_role": "Security Officer",
+            "employee_id": "E008"
+        }
+    },
+    "guests": {
+        "Room 101": [
+            {
+                "person_name": {
+                    "last": "Smith",
+                    "first": "John"
+                },
+                "person_id": "987654321",
+                "person_phone": "555-9876",
+                "person_email": "john.smith@example.com",
+                "guest_adress": "123 Elm St",
+                "guest_birthday": "03/25/1985"
+            },
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 102": [
+            {
+                "person_name": {
+                    "last": "Doe",
+                    "first": "Jane"
+                },
+                "person_id": "123456789",
+                "person_phone": "555-1234",
+                "person_email": "jane.doe@example.com",
+                "guest_adress": "456 Oak St",
+                "guest_birthday": "07/14/1990"
+            },
+            {
+                "person_name": {
+                    "last": "Doe",
+                    "first": "Jane"
+                },
+                "person_id": "123456789",
+                "person_phone": "555-1234",
+                "person_email": "jane.doe@example.com",
+                "guest_adress": "456 Oak St",
+                "guest_birthday": "07/14/1990"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 103": [
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 104": [
+            {
+                "person_name": {
+                    "last": "Johnson",
+                    "first": "Michael"
+                },
+                "person_id": "234567891",
+                "person_phone": "555-2345",
+                "person_email": "michael.johnson@example.com",
+                "guest_adress": "789 Pine St",
+                "guest_birthday": "11/02/1975"
+            },
+            {
+                "person_name": {
+                    "last": "Brown",
+                    "first": "Emily"
+                },
+                "person_id": "345678912",
+                "person_phone": "555-3456",
+                "person_email": "emily.brown@example.com",
+                "guest_adress": "101 Maple St",
+                "guest_birthday": "05/16/1982"
+            },
+            {
+                "person_name": {
+                    "last": "Brown",
+                    "first": "Emily"
+                },
+                "person_id": "345678912",
+                "person_phone": "555-3456",
+                "person_email": "emily.brown@example.com",
+                "guest_adress": "101 Maple St",
+                "guest_birthday": "05/16/1982"
+            }
+        ],
+        "Room 201": [
+            {
+                "person_name": {
+                    "last": "Williams",
+                    "first": "David"
+                },
+                "person_id": "456789123",
+                "person_phone": "555-4567",
+                "person_email": "david.williams@example.com",
+                "guest_adress": "202 Cedar St",
+                "guest_birthday": "09/10/1988"
+            },
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 202": [
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 203": [
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "Front Desk Manager"
+            },
+            {
+                "person_name": {
+                    "last": "Jones",
+                    "first": "Sarah"
+                },
+                "person_id": "567891234",
+                "person_phone": "555-5678",
+                "person_email": "sarah.jones@example.com",
+                "guest_adress": "303 Birch St",
+                "guest_birthday": "12/30/1992"
+            }
+        ],
+        "Room 204": [
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 301": [
+            {
+                "person_name": {
+                    "last": "Garcia",
+                    "first": "Carlos"
+                },
+                "person_id": "678912345",
+                "person_phone": "555-6789",
+                "person_email": "carlos.garcia@example.com",
+                "guest_adress": "404 Spruce St",
+                "guest_birthday": "08/20/1983"
+            },
+            {
+                "person_name": {
+                    "last": "Garcia",
+                    "first": "Carlos"
+                },
+                "person_id": "678912345",
+                "person_phone": "555-6789",
+                "person_email": "carlos.garcia@example.com",
+                "guest_adress": "404 Spruce St",
+                "guest_birthday": "08/20/1983"
+            },
+            {
+                "employee_role": "Maintenance Worker"
+            }
+        ],
+        "Room 302": [
+            {
+                "employee_role": "Front Desk Manager"
+            },
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Housekeeper"
+            }
+        ],
+        "Room 303": [
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 304": [
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ]
+    }
+}
