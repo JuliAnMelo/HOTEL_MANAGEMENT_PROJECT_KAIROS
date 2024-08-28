@@ -747,3 +747,771 @@ if __name__ == "__main__":
     main()
 ```
 A very simple file, with a `while` loop, that allows to interact continuously with `program` `int(input())`, it has the "main menu" as the argument"
+
+
+# **The json update**
+Looking forward to add a `Person` class became necesary to locate the `KAIROS` `Hotel` and `Room` objects in an external file, instead of being in the `main` file:
+```python
+R101 = Simple_Room(["Room 101", 3, 1, 1, 1, 0, 0])
+R102 = Simple_Room(["Room 102", 2, 2, 3, 3, 0, 0])
+R103 = Double_Room(["Room 103", 4, 1, 5, 2, 0, 0])
+R104 = Double_Room(["Room 104", 3, 3, 2, 1, 3, 4])
+
+R201 = Simple_Room(["Room 201", 3, 0, 4, 1, 0, 0])
+R202 = Simple_Room(["Room 202", 5, 2, 0, 0, 0, 0])
+R203 = Twin_Room(["Room 203", 5, 0, 6, 2, 3, 3])
+R204 = Twin_Room(["Room 204", 0, 0, 0, 0, 0, 0])
+
+R301 = Double_Room(["Room 301", 2, 3, 3, 3, 5, 2])
+R302 = Double_Room(["Room 302", 6, 2, 4, 2, 1, 1])
+R303 = Family_Room(["Room 303", 4, 2, 1, 1, 0, 0])
+R304 = Family_Room(["Room 304", 1, 1, 0, 0, 0, 0])
+
+KAIROS = Hotel((R101, R102, R103, R104, R201, R202, R203, R204, R301, R302, R303, R304))
+```
+So, it was necesary to redefine some aspects of `Hotel` and `Room` class to made the conversion to a **json** compatible format. But first, there is the `Person` class:
+
+## The `Person` class
+**At the moment Person class related methods are only utilized to make Python Objects into json format**
+### Definition
+```python
+class Person():
+    def __init__(self, person_data: list = None):
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain"]
+        self.person_name = person_data[0]
+        self.person_id = person_data[1]
+        self.person_phone = person_data[2]
+        self.person_email = person_data[3]
+
+class Guest(Person):
+    def __init__(self, person_data: list = None):
+        super().__init__(person_data)
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "guest_adress", "mm/dd/yyyy"]
+        self.guest_adress = person_data[4]
+        self.guest_birthday = person_data[5]
+
+class Employee(Person):
+    def __init__(self, person_data: list = None):
+        super().__init__(person_data)
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "job_title", "employee_code"]
+        self.employee_role = person_data[4]
+        self.employee_id = person_data[5]
+```
+`Person`'s `__init__`  is represented by `person_data`, a `list`, this is designed like that because by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Person, Guest and a Employee in this project:
+
+`Person`
+| `Person.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[0]` | `person_name` | A `tuple` that identifies the person last and first name |
+| `person_data[1]` | `person_id` | A `str` that represents the person identification number |
+| `person_data[2]` | `person_phone` | A `str` that represents the person cellphone number |
+| `person_data[3]` | `person_email` | A `str` that represents the person email address |
+
+`Guest`
+| `Guest.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[4]` | `guest_adress` |  A `str` that represents the guest residence address |
+| `person_data[5]` | `guest_birthday` | A `str` that represents the guest birtday date |
+
+`Employee`
+| `Employee.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[4]` | `employee_role` |  A `str` that represents the employee role |
+| `person_data[5]` | `employee_id` | A `str` that represents the employee's id code |
+
+
+## Updated `Hotel` class
+```python
+class Hotel():
+    def __init__(self, hotel_data: tuple[Room, ...] = (), employees: dict = None, guests: dict = None):
+        self.hotel_data = hotel_data
+        self.employees = employees
+        self.guests = guests
+```
+So, the Hotel's employees and guests data are two separated `dict` objects.
+
+### The new actual hotel
+The `Room` objects are unaltered.
+```python
+R101 = Simple_Room(["Room 101", 3, 1, 1, 1, 0, 0])
+R102 = Simple_Room(["Room 102", 2, 2, 3, 3, 0, 0])
+R103 = Double_Room(["Room 103", 4, 1, 5, 2, 0, 0])
+R104 = Double_Room(["Room 104", 3, 3, 2, 1, 3, 4])
+
+R201 = Simple_Room(["Room 201", 3, 0, 4, 1, 0, 0])
+R202 = Simple_Room(["Room 202", 5, 2, 0, 0, 0, 0])
+R203 = Twin_Room(["Room 203", 5, 0, 6, 2, 3, 3])
+R204 = Twin_Room(["Room 204", 0, 0, 0, 0, 0, 0])
+
+R301 = Double_Room(["Room 301", 2, 3, 3, 3, 5, 2])
+R302 = Double_Room(["Room 302", 6, 2, 4, 2, 1, 1])
+R303 = Family_Room(["Room 303", 4, 2, 1, 1, 0, 0])
+R304 = Family_Room(["Room 304", 1, 1, 0, 0, 0, 0])
+```
+
+The `employees` `dict` relates the employee's `employee_role` attribute with the actual `Employee` object.
+```python
+employees = {"NOINFO": Employee([("NOLASTNAME", "NOFIRSTNAME"), "0000000000", "000-0000", "username@server.domain", "NOINFO", "E000"]),
+             "Receptionist": Employee([("Garcia", "Laura"), "0012345678", "555-0101", "laura.garcia@hotel.com", "Receptionist", "E001"]),
+             "Housekeeper": Employee([("Smith", "John"), "0023456789", "555-0202", "john.smith@hotel.com", "Housekeeper", "E002"]),
+             "Concierge": Employee([("Doe", "Jane"), "0034567890", "555-0303", "jane.doe@hotel.com", "Concierge", "E003"]),
+             "Chef": Employee([("Williams", "Emily"), "0056789012", "555-0505", "emily.williams@hotel.com", "Chef", "E004"]),
+             "Maintenance Worker": Employee([("Martinez", "Carlos"), "0067890123", "555-0606", "carlos.martinez@hotel.com", "Maintenance Worker", "E005"]),
+             "General Manager": Employee([("Davis", "Kevin"), "0089012345", "555-0808", "kevin.davis@hotel.com", "General Manager", "E006"]),
+             "Front Desk Manager": Employee([("Rodriguez", "Angela"), "0090123456", "555-0909", "angela.rodriguez@hotel.com", "Front Desk Manager", "E007"]),
+             "Security Officer": Employee([("Lee", "Daniel"), "0101234567", "555-1010", "daniel.lee@hotel.com", "Security Officer", "E008"])}
+```
+
+The `guests` `dict` relates the room's `room_name` attribute with three `Person` objects, that represents the by now unexistent attributes `current_person`, `next_person` y `after_person`, related but independent to the `Room` attributes.
+```python
+guests = {"Room 101": (Guest([("Smith", "John"), "987654321", "555-9876", "john.smith@example.com", "123 Elm St", "03/25/1985"]),
+                       employees["Housekeeper"],
+                       employees["NOINFO"]),
+          "Room 102": (Guest([("Doe", "Jane"), "123456789", "555-1234", "jane.doe@example.com", "456 Oak St", "07/14/1990"]), 
+                       Guest([("Doe", "Jane"), "123456789", "555-1234", "jane.doe@example.com", "456 Oak St", "07/14/1990"]),
+                       employees["NOINFO"]),
+          "Room 103": (employees["Concierge"],
+                       employees["Maintenance Worker"],
+                       employees["NOINFO"]),
+          "Room 104": (Guest([("Johnson", "Michael"), "234567891", "555-2345", "michael.johnson@example.com", "789 Pine St", "11/02/1975"]),
+                       Guest([("Brown", "Emily"), "345678912", "555-3456", "emily.brown@example.com", "101 Maple St", "05/16/1982"]),
+                       Guest([("Brown", "Emily"), "345678912", "555-3456", "emily.brown@example.com", "101 Maple St", "05/16/1982"])),
+          "Room 201": (Guest([("Williams", "David"), "456789123", "555-4567", "david.williams@example.com", "202 Cedar St", "09/10/1988"]),
+                       employees["Concierge"],
+                       employees["NOINFO"]),
+          "Room 202": (employees["Maintenance Worker"],
+                       employees["NOINFO"],
+                       employees["NOINFO"]),
+          "Room 203": (employees["Maintenance Worker"],
+                     employees["Front Desk Manager"],
+                     Guest([("Jones", "Sarah"), "567891234", "555-5678", "sarah.jones@example.com", "303 Birch St", "12/30/1992"])),
+          "Room 204": (employees["NOINFO"],
+                       employees["NOINFO"],
+                       employees["NOINFO"]),
+          "Room 301": (Guest([("Garcia", "Carlos"), "678912345", "555-6789", "carlos.garcia@example.com", "404 Spruce St", "08/20/1983"]),
+                       Guest([("Garcia", "Carlos"), "678912345", "555-6789", "carlos.garcia@example.com", "404 Spruce St", "08/20/1983"]),
+                       employees["Maintenance Worker"]),
+          "Room 302": (employees["Front Desk Manager"],
+                       employees["Concierge"],
+                       employees["Housekeeper"]),
+          "Room 303": (employees["Concierge"],
+                       employees["Housekeeper"],
+                       employees["NOINFO"]),
+          "Room 304": (employees["Housekeeper"],
+                       employees["NOINFO"],
+                       employees["NOINFO"])}
+```
+
+## **The json Conversion**
+Each class, now has the brand new `to_dict` and `from_dict` methods:
+- `to_dict`, returns a `dict` version of the object.
+- `from_dict`, returns a conversion of a `dict` into the class object.
+
+### `Person`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  class Guest(Person):
+    def to_dict(self) -> dict:
+        return {"person_name": {"last": self.person_name[0],
+                                "first": self.person_name[1]},
+                "person_id": self.person_id,
+                "person_phone": self.person_phone,
+                "person_email": self.person_email,
+                "guest_adress": self.guest_adress,
+                "guest_birthday": self.guest_birthday}
+    @classmethod
+    def from_dict(cls, data):
+        employee_data = [(data["person_name"]["last"], data["person_name"]["first"]),
+                          data["person_id"],
+                          data["person_phone"],
+                          data["person_email"],
+                          data["guest_adress"],
+                          data["guest_birthday"]]
+        return cls(employee_data)
+
+
+class Employee(Person):
+    def to_dict(self) -> dict:
+        return {"person_name": self.person_name,
+                "person_id": self.person_id,
+                "person_phone": self.person_phone,
+                "person_email": self.person_email,
+                "employee_role": self.employee_role,
+                "employee_id": self.employee_id}
+    @classmethod
+    def from_dict(cls, data):
+        employee_data = [data["person_name"],
+                            data["person_id"],
+                            data["person_phone"],
+                            data["person_email"],
+                            data["employee_role"],
+                            data["employee_id"]]
+        return cls(employee_data)
+  ```
+
+</p>
+</details>
+
+
+### `Room`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  class Room():
+    def to_dict(self) -> dict:
+        return {"room_name": self.room_name,
+                "current_status": self.current_status,
+                "current_endline": self.current_endline,
+                "next_status": self.next_status,
+                "next_endline": self.next_endline,
+                "after_status": self.after_status,
+                "after_endline": self.after_endline}
+    @classmethod
+    def from_dict(cls, data_dict):
+        room_data = [data_dict["room_name"],
+                     data_dict["current_status"],
+                     data_dict["current_endline"],
+                     data_dict["next_status"],
+                     data_dict["next_endline"],
+                     data_dict["after_status"],
+                     data_dict["after_endline"]]
+        return cls(room_data)
+  ```
+
+</p>
+</details>
+
+
+### `Hotel`
+<details><summary>Details</summary>
+<p>
+  This the most complex of all, enables the whole conversion of the hotel.
+    
+  ```python
+  class Hotel():   
+    def to_dict(self) -> dict:
+        return {"hotel_data": [room.to_dict() for room in self.hotel_data], 
+                "employees": {role: emp.to_dict() for role, emp in self.employees.items()},
+                "guests": {room_name: [guest.to_dict() if isinstance(guest, Guest) else {"employee_role": guest.employee_role} for guest in guests_list]
+                           for room_name, guests_list in self.guests.items()}}
+    @classmethod
+    def from_dict(cls, data_dict):
+        room_objects = []
+        for room_data in data_dict["hotel_data"]:
+            room_type = room_data.pop("type")
+            if room_type == "Simple_Room":
+                room_objects.append(Simple_Room.from_dict(room_data))
+            elif room_type == "Double_Room":
+                room_objects.append(Double_Room.from_dict(room_data))
+            elif room_type == "Twin_Room":
+                room_objects.append(Twin_Room.from_dict(room_data))
+            elif room_type == "Family_Room":
+                room_objects.append(Family_Room.from_dict(room_data))
+            else:
+                raise ValueError(f"Unknown room type: {room_type}")
+            
+        employees = {role: Employee.from_dict(emp_data) for role, emp_data in data_dict.get("employees", {}).items()}
+        
+        guests = {}
+        for room_name, guests_list in data_dict.get("guests", {}).items():
+            guests[room_name] = []
+            for guest_data in guests_list:
+                if "employee_role" in guest_data:
+                    # Find the employee object by matching employee role
+                    employee = next(emp for emp in employees.values() if emp.employee_role == guest_data["employee_role"])
+                    guests[room_name].append(employee)
+                else:
+                    guests[room_name].append(Guest.from_dict(guest_data))
+
+        return cls(tuple(room_objects), employees, guests)
+  ```
+
+</p>
+</details>
+
+
+### **The Actual json conversion**
+```python
+import json
+from kairos_packages.room_cls import Simple_Room, Double_Room, Twin_Room, Family_Room
+from kairos_packages.hotel_cls import Hotel
+from kairos_packages.person_cls import Guest, Employee
+
+def main():
+    while True:
+        program = int(input("))
+        elif program == 5:            #end the "day" + JSON TEST      
+            with open('KAIROS_data.json', 'r+') as json_file:          
+                KAIROS_data = KAIROS.to_dict()    
+                json.dump(KAIROS_data, json_file, indent=4)
+                KAIROS.sunset_protocol()
+
+if __name__ == "__main__": 
+    main()
+```
+
+As you can see, if `program == 5 is True` appears three new lines of code, in this case based on "The new actual hotel" information located in the `main` file, that does the `Hotel` class conversion to `dict` and with that object, builds a **.json** file.
+
+
+<details><summary>KAIROS_data.json</summary>
+<p>  
+    
+  ```json
+  {
+    "hotel_data": [
+        {
+            "room_name": "Room 101",
+            "current_status": 3,
+            "current_endline": 1,
+            "next_status": 1,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 102",
+            "current_status": 2,
+            "current_endline": 2,
+            "next_status": 3,
+            "next_endline": 3,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 103",
+            "current_status": 4,
+            "current_endline": 1,
+            "next_status": 5,
+            "next_endline": 2,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 104",
+            "current_status": 3,
+            "current_endline": 3,
+            "next_status": 2,
+            "next_endline": 1,
+            "after_status": 3,
+            "after_endline": 4,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 201",
+            "current_status": 3,
+            "current_endline": 0,
+            "next_status": 4,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 202",
+            "current_status": 5,
+            "current_endline": 2,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Simple_Room"
+        },
+        {
+            "room_name": "Room 203",
+            "current_status": 5,
+            "current_endline": 0,
+            "next_status": 6,
+            "next_endline": 2,
+            "after_status": 3,
+            "after_endline": 3,
+            "type": "Twin_Room"
+        },
+        {
+            "room_name": "Room 204",
+            "current_status": 0,
+            "current_endline": 0,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Twin_Room"
+        },
+        {
+            "room_name": "Room 301",
+            "current_status": 2,
+            "current_endline": 3,
+            "next_status": 3,
+            "next_endline": 3,
+            "after_status": 5,
+            "after_endline": 2,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 302",
+            "current_status": 6,
+            "current_endline": 2,
+            "next_status": 4,
+            "next_endline": 2,
+            "after_status": 1,
+            "after_endline": 1,
+            "type": "Double_Room"
+        },
+        {
+            "room_name": "Room 303",
+            "current_status": 4,
+            "current_endline": 2,
+            "next_status": 1,
+            "next_endline": 1,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Family_Room"
+        },
+        {
+            "room_name": "Room 304",
+            "current_status": 1,
+            "current_endline": 1,
+            "next_status": 0,
+            "next_endline": 0,
+            "after_status": 0,
+            "after_endline": 0,
+            "type": "Family_Room"
+        }
+    ],
+    "employees": {
+        "NOINFO": {
+            "person_name": [
+                "NOLASTNAME",
+                "NOFIRSTNAME"
+            ],
+            "person_id": "0000000000",
+            "person_phone": "000-0000",
+            "person_email": "username@server.domain",
+            "employee_role": "NOINFO",
+            "employee_id": "E000"
+        },
+        "Receptionist": {
+            "person_name": [
+                "Garcia",
+                "Laura"
+            ],
+            "person_id": "0012345678",
+            "person_phone": "555-0101",
+            "person_email": "laura.garcia@hotel.com",
+            "employee_role": "Receptionist",
+            "employee_id": "E001"
+        },
+        "Housekeeper": {
+            "person_name": [
+                "Smith",
+                "John"
+            ],
+            "person_id": "0023456789",
+            "person_phone": "555-0202",
+            "person_email": "john.smith@hotel.com",
+            "employee_role": "Housekeeper",
+            "employee_id": "E002"
+        },
+        "Concierge": {
+            "person_name": [
+                "Doe",
+                "Jane"
+            ],
+            "person_id": "0034567890",
+            "person_phone": "555-0303",
+            "person_email": "jane.doe@hotel.com",
+            "employee_role": "Concierge",
+            "employee_id": "E003"
+        },
+        "Chef": {
+            "person_name": [
+                "Williams",
+                "Emily"
+            ],
+            "person_id": "0056789012",
+            "person_phone": "555-0505",
+            "person_email": "emily.williams@hotel.com",
+            "employee_role": "Chef",
+            "employee_id": "E004"
+        },
+        "Maintenance Worker": {
+            "person_name": [
+                "Martinez",
+                "Carlos"
+            ],
+            "person_id": "0067890123",
+            "person_phone": "555-0606",
+            "person_email": "carlos.martinez@hotel.com",
+            "employee_role": "Maintenance Worker",
+            "employee_id": "E005"
+        },
+        "General Manager": {
+            "person_name": [
+                "Davis",
+                "Kevin"
+            ],
+            "person_id": "0089012345",
+            "person_phone": "555-0808",
+            "person_email": "kevin.davis@hotel.com",
+            "employee_role": "General Manager",
+            "employee_id": "E006"
+        },
+        "Front Desk Manager": {
+            "person_name": [
+                "Rodriguez",
+                "Angela"
+            ],
+            "person_id": "0090123456",
+            "person_phone": "555-0909",
+            "person_email": "angela.rodriguez@hotel.com",
+            "employee_role": "Front Desk Manager",
+            "employee_id": "E007"
+        },
+        "Security Officer": {
+            "person_name": [
+                "Lee",
+                "Daniel"
+            ],
+            "person_id": "0101234567",
+            "person_phone": "555-1010",
+            "person_email": "daniel.lee@hotel.com",
+            "employee_role": "Security Officer",
+            "employee_id": "E008"
+        }
+    },
+    "guests": {
+        "Room 101": [
+            {
+                "person_name": {
+                    "last": "Smith",
+                    "first": "John"
+                },
+                "person_id": "987654321",
+                "person_phone": "555-9876",
+                "person_email": "john.smith@example.com",
+                "guest_adress": "123 Elm St",
+                "guest_birthday": "03/25/1985"
+            },
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 102": [
+            {
+                "person_name": {
+                    "last": "Doe",
+                    "first": "Jane"
+                },
+                "person_id": "123456789",
+                "person_phone": "555-1234",
+                "person_email": "jane.doe@example.com",
+                "guest_adress": "456 Oak St",
+                "guest_birthday": "07/14/1990"
+            },
+            {
+                "person_name": {
+                    "last": "Doe",
+                    "first": "Jane"
+                },
+                "person_id": "123456789",
+                "person_phone": "555-1234",
+                "person_email": "jane.doe@example.com",
+                "guest_adress": "456 Oak St",
+                "guest_birthday": "07/14/1990"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 103": [
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 104": [
+            {
+                "person_name": {
+                    "last": "Johnson",
+                    "first": "Michael"
+                },
+                "person_id": "234567891",
+                "person_phone": "555-2345",
+                "person_email": "michael.johnson@example.com",
+                "guest_adress": "789 Pine St",
+                "guest_birthday": "11/02/1975"
+            },
+            {
+                "person_name": {
+                    "last": "Brown",
+                    "first": "Emily"
+                },
+                "person_id": "345678912",
+                "person_phone": "555-3456",
+                "person_email": "emily.brown@example.com",
+                "guest_adress": "101 Maple St",
+                "guest_birthday": "05/16/1982"
+            },
+            {
+                "person_name": {
+                    "last": "Brown",
+                    "first": "Emily"
+                },
+                "person_id": "345678912",
+                "person_phone": "555-3456",
+                "person_email": "emily.brown@example.com",
+                "guest_adress": "101 Maple St",
+                "guest_birthday": "05/16/1982"
+            }
+        ],
+        "Room 201": [
+            {
+                "person_name": {
+                    "last": "Williams",
+                    "first": "David"
+                },
+                "person_id": "456789123",
+                "person_phone": "555-4567",
+                "person_email": "david.williams@example.com",
+                "guest_adress": "202 Cedar St",
+                "guest_birthday": "09/10/1988"
+            },
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 202": [
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 203": [
+            {
+                "employee_role": "Maintenance Worker"
+            },
+            {
+                "employee_role": "Front Desk Manager"
+            },
+            {
+                "person_name": {
+                    "last": "Jones",
+                    "first": "Sarah"
+                },
+                "person_id": "567891234",
+                "person_phone": "555-5678",
+                "person_email": "sarah.jones@example.com",
+                "guest_adress": "303 Birch St",
+                "guest_birthday": "12/30/1992"
+            }
+        ],
+        "Room 204": [
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 301": [
+            {
+                "person_name": {
+                    "last": "Garcia",
+                    "first": "Carlos"
+                },
+                "person_id": "678912345",
+                "person_phone": "555-6789",
+                "person_email": "carlos.garcia@example.com",
+                "guest_adress": "404 Spruce St",
+                "guest_birthday": "08/20/1983"
+            },
+            {
+                "person_name": {
+                    "last": "Garcia",
+                    "first": "Carlos"
+                },
+                "person_id": "678912345",
+                "person_phone": "555-6789",
+                "person_email": "carlos.garcia@example.com",
+                "guest_adress": "404 Spruce St",
+                "guest_birthday": "08/20/1983"
+            },
+            {
+                "employee_role": "Maintenance Worker"
+            }
+        ],
+        "Room 302": [
+            {
+                "employee_role": "Front Desk Manager"
+            },
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Housekeeper"
+            }
+        ],
+        "Room 303": [
+            {
+                "employee_role": "Concierge"
+            },
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ],
+        "Room 304": [
+            {
+                "employee_role": "Housekeeper"
+            },
+            {
+                "employee_role": "NOINFO"
+            },
+            {
+                "employee_role": "NOINFO"
+            }
+        ]
+    }
+}
+  ```
+
+</p>
+</details>
+
+
+## What's Next?
+- In code definitions of `to_dict` and `from_dict` methods
+- New `Room` class method related to cancel scheduling.
+- Integrate the `Room` class methods to modify the `Hotel.guests` dict.
+- Establish the **json** version of `KAIROS` as the only version.
+- Create an `Exception` class.
+- What the feedback indicates
