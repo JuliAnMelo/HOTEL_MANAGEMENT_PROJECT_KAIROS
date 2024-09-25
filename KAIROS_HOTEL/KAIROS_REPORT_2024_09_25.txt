@@ -1,0 +1,64 @@
+PYLONE TEAM HOTEL MANAGEMENT SOLUTION
+KAIROS HOTEL SYSTEM
+
+Wednesday, September 25, 2024
+
+   Room 101
+CURRENT STATUS  -  OCCUPIED  BY  John Smith - 555-9876  UNTIL  Thu Sep 26 2024
+NEXT STATUS     -  AVAILABLE  BY  Housekeeper - John Smith  UNTIL  Fri Sep 27 2024
+AFTER STATUS    -  NOINFO
+
+   Room 102
+CURRENT STATUS  -  RESERVED  BY  Jane Doe - 555-1234  UNTIL  Fri Sep 27 2024
+NEXT STATUS     -  OCCUPIED  BY  Jane Doe - 555-1234  UNTIL  Mon Sep 30 2024
+AFTER STATUS    -  NOINFO
+
+   Room 103
+CURRENT STATUS  -  CLEANING  BY  Concierge - Jane Doe  UNTIL  Thu Sep 26 2024
+NEXT STATUS     -  MAINTENANCE  BY  Maintenance Worker - Carlos Martinez  UNTIL  Sat Sep 28 2024
+AFTER STATUS    -  NOINFO
+
+   Room 104
+CURRENT STATUS  -  OCCUPIED  BY  Michael Johnson - 555-2345  UNTIL  Sat Sep 28 2024
+NEXT STATUS     -  RESERVED  BY  Emily Brown - 555-3456  UNTIL  Sun Sep 29 2024
+AFTER STATUS    -  OCCUPIED  BY  Emily Brown - 555-3456  UNTIL  Thu Oct 03 2024
+
+   Room 201
+CURRENT STATUS  -  OCCUPIED  BY  David Williams - 555-4567  UNTIL  Wed Sep 25 2024
+NEXT STATUS     -  CLEANING  BY  Concierge - Jane Doe  UNTIL  Thu Sep 26 2024
+AFTER STATUS    -  NOINFO
+
+   Room 202
+CURRENT STATUS  -  MAINTENANCE  BY  Maintenance Worker - Carlos Martinez  UNTIL  Fri Sep 27 2024
+NEXT STATUS     -  NOINFO
+AFTER STATUS    -  NOINFO
+
+   Room 203
+CURRENT STATUS  -  MAINTENANCE  BY  Maintenance Worker - Carlos Martinez  UNTIL  Wed Sep 25 2024
+NEXT STATUS     -  DISABLED  BY  Front Desk Manager - Angela Rodriguez  UNTIL  Fri Sep 27 2024
+AFTER STATUS    -  OCCUPIED  BY  Sarah Jones - 555-5678  UNTIL  Mon Sep 30 2024
+
+   Room 204
+CURRENT STATUS  -  NOINFO
+NEXT STATUS     -  NOINFO
+AFTER STATUS    -  NOINFO
+
+   Room 301
+CURRENT STATUS  -  RESERVED  BY  Carlos Garcia - 555-6789  UNTIL  Sat Sep 28 2024
+NEXT STATUS     -  OCCUPIED  BY  Carlos Garcia - 555-6789  UNTIL  Tue Oct 01 2024
+AFTER STATUS    -  MAINTENANCE  BY  Maintenance Worker - Carlos Martinez  UNTIL  Thu Oct 03 2024
+
+   Room 302
+CURRENT STATUS  -  DISABLED  BY  Front Desk Manager - Angela Rodriguez  UNTIL  Fri Sep 27 2024
+NEXT STATUS     -  CLEANING  BY  Concierge - Jane Doe  UNTIL  Sun Sep 29 2024
+AFTER STATUS    -  AVAILABLE  BY  Housekeeper - John Smith  UNTIL  Mon Sep 30 2024
+
+   Room 303
+CURRENT STATUS  -  CLEANING  BY  Concierge - Jane Doe  UNTIL  Fri Sep 27 2024
+NEXT STATUS     -  AVAILABLE  BY  Housekeeper - John Smith  UNTIL  Sat Sep 28 2024
+AFTER STATUS    -  NOINFO
+
+   Room 304
+CURRENT STATUS  -  AVAILABLE  BY  Housekeeper - John Smith  UNTIL  Thu Sep 26 2024
+NEXT STATUS     -  NOINFO
+AFTER STATUS    -  NOINFO

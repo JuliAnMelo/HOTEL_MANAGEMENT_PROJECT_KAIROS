@@ -15,16 +15,18 @@ R302 = Double_Room(["Room 302", 6, 2, 4, 2, 1, 1])
 R303 = Family_Room(["Room 303", 4, 2, 1, 1, 0, 0])
 R304 = Family_Room(["Room 304", 1, 1, 0, 0, 0, 0])
 
+
 employees = {"NOINFO": Employee([("NOLASTNAME", "NOFIRSTNAME"), "0000000000", "000-0000", "username@server.domain", "NOINFO", "E000"]),
              "Receptionist": Employee([("Garcia", "Laura"), "0012345678", "555-0101", "laura.garcia@hotel.com", "Receptionist", "E001"]),
              "Housekeeper": Employee([("Smith", "John"), "0023456789", "555-0202", "john.smith@hotel.com", "Housekeeper", "E002"]),
              "Concierge": Employee([("Doe", "Jane"), "0034567890", "555-0303", "jane.doe@hotel.com", "Concierge", "E003"]),
-             "Chef": Employee([("Williams", "Emily"), "0056789012", "555-0505", "emily.williams@hotel.com", "Chef", "E004"]),
+             "Chef": Employee([("Williams", "Emily"), "00s56789012", "555-0505", "emily.williams@hotel.com", "Chef", "E004"]),
              "Maintenance Worker": Employee([("Martinez", "Carlos"), "0067890123", "555-0606", "carlos.martinez@hotel.com", "Maintenance Worker", "E005"]),
              "General Manager": Employee([("Davis", "Kevin"), "0089012345", "555-0808", "kevin.davis@hotel.com", "General Manager", "E006"]),
              "Front Desk Manager": Employee([("Rodriguez", "Angela"), "0090123456", "555-0909", "angela.rodriguez@hotel.com", "Front Desk Manager", "E007"]),
              "Security Officer": Employee([("Lee", "Daniel"), "0101234567", "555-1010", "daniel.lee@hotel.com", "Security Officer", "E008"])}
 
+             
 guests = {"Room 101": (Guest([("Smith", "John"), "987654321", "555-9876", "john.smith@example.com", "123 Elm St", "03/25/1985"]),
                        employees["Housekeeper"],
                        employees["NOINFO"]),
@@ -519,6 +521,7 @@ Guest([("Brown", "Emily"), "345678912", "555-3456", "emily.brown@example.com", "
 Guest([("Williams", "David"), "456789123", "555-4567", "david.williams@example.com", "202 Cedar St", "09/10/1988"])
 Guest([("Jones", "Sarah"), "567891234", "555-5678", "sarah.jones@example.com", "303 Birch St", "12/30/1992"])
 Guest([("Garcia", "Carlos"), "678912345", "555-6789", "carlos.garcia@example.com", "404 Spruce St", "08/20/1983"])
+----------------------------------------------------------------------------------------------------------------------------
 Guest([("Miller", "Anna"), "789123456", "555-7890", "anna.miller@example.com", "505 Willow St", "10/05/1979"])
 Guest([("Martinez", "Luis"), "891234567", "555-8901", "luis.martinez@example.com", "606 Redwood St", "02/14/1986"])
 Guest([("Rodriguez", "Maria"), "912345678", "555-9012", "maria.rodriguez@example.com", "707 Fir St", "04/18/1987"])
@@ -537,4 +540,4 @@ Guest([("Perez", "Kimberly"), "234109875", "555-1234", "kimberly.perez@example.c
 Guest([("White", "Joshua"), "345210986", "555-2345", "joshua.white@example.com", "2020 Chestnut St", "11/23/1994"])
 Guest([("Clark", "Ashley"), "456321097", "555-3456", "ashley.clark@example.com", "2121 Sequoia St", "02/26/1990"])
 Guest([("Lewis", "Brandon"), "567432108", "555-4567", "brandon.lewis@example.com", "2222 Willow St", "01/15/1988"])
-"""
+"""           
