@@ -13,11 +13,16 @@ classDiagram
     }
 
     class Guest {
+        +str guest_adress
+        +str guest_birthday
         +to_dict() dict
         +from_dict(cls, data) Guest
+        +registration(cls) Guest
     }
 
     class Employee {
+        +str employee_role
+        +str employee_id
         +to_dict() dict
         +from_dict(cls, data) Employee
     }
@@ -38,14 +43,12 @@ classDiagram
         +str schedule_message
         +str slowdown
         +to_dict() dict
-        +from_dict(cls, data_dict) Room
+        +from_dict(cls, data_dict: dict) Room
         +get_current_status() str
         +get_complete_status() str
-        +sunrise_protocol() str
         +scheduling_conditions(option: int) bool
         +scheduling_data(option: int) str
         +scheduling_protocol(option: int) str
-        +sunset_protocol() None
     }
 
     class Simple_Room {
@@ -74,12 +77,15 @@ classDiagram
         +dict[Person] employees
         +dict[Guest] guests
         +to_dict() dict
-        +from_dict(cls, data_dict) Hotel
+        +from_dict(cls, data_dict: dict) Hotel
         +get_current_status() None
         +get_complete_status() None
         +sunrise_protocol() None
         +sunset_protocol() None
         +noon_protocol() None
+        +sunset_protocol() -> None
+        +midnight_protocol() -> None
+        +get_daily_report(date: datetime) -> str
     }
 
     Hotel "1" -- "0.." Room : contains
