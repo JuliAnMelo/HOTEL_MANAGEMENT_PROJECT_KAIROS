@@ -1,7 +1,7 @@
 # Object Oriented Programming Project: Kairos Hotel
 ## Concept
 The idea raises by looking for a OOP application, an aplication with an emphasis on information management and that it was motivating for the Python coding.
-This hotel idea has a focus on representing the room management concept, being represented with predetermined variables, which are condensated in the Python classes designed for that: `Room` and `Hotel`
+This hotel idea has a focus on representing the room management concept, being represented with predetermined variables, which are condensated in the Python classes designed for that: `Hotel`, `Room` and `Person`.
 ## Class Diagram
 ```mermaid
 classDiagram
@@ -87,6 +87,79 @@ classDiagram
     Hotel "1" -- "0.." Guest : hosts
 ```
 
+## The `Person` class
+**At the moment Person class related methods are only utilized to make Python Objects into json format**
+### Definition
+```python
+class Person():
+    def __init__(self, person_data: list = None):
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain"]
+        self.person_name = person_data[0]
+        self.person_id = person_data[1]
+        self.person_phone = person_data[2]
+        self.person_email = person_data[3]
+
+class Guest(Person):
+    def __init__(self, person_data: list = None):
+        super().__init__(person_data)
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "guest_adress", "mm/dd/yyyy"]
+        self.guest_adress = person_data[4]
+        self.guest_birthday = person_data[5]
+
+class Employee(Person):
+    def __init__(self, person_data: list = None):
+        super().__init__(person_data)
+        if person_data is None:
+            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "job_title", "employee_code"]
+        self.employee_role = person_data[4]
+        self.employee_id = person_data[5]
+```
+`Person`'s `__init__`  is represented by `person_data`, a `list`, this is designed like that because by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Person, Guest and a Employee in this project:
+
+`Person`
+| `Person.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[0]` | `person_name` | A `tuple` that identifies the person last and first name |
+| `person_data[1]` | `person_id` | A `str` that represents the person identification number |
+| `person_data[2]` | `person_phone` | A `str` that represents the person cellphone number |
+| `person_data[3]` | `person_email` | A `str` that represents the person email address |
+
+`Guest`
+| `Guest.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[4]` | `guest_adress` |  A `str` that represents the guest residence address |
+| `person_data[5]` | `guest_birthday` | A `str` that represents the guest birtday date |
+
+`Employee`
+| `Employee.person_data` index | `self.` Attribute | Description |
+| ------------ | ------------ | ------------ |
+| `person_data[4]` | `employee_role` |  A `str` that represents the employee role |
+| `person_data[5]` | `employee_id` | A `str` that represents the employee's id code |
+
+### The `Guest` only method
+```python
+@classmethod
+def registration(cls):
+    Collects guest information from user input and creates a Guest object.
+
+    It then returns an instance of the Guest class populated with the provided information.
+    """
+    print("Registration:")
+    surname = str(input("Last Name         --> "))
+    name =    str(input("First Name        --> "))
+    ide =     str(input("Identification    --> "))
+    phone =   str(input("Phone Number      --> "))
+    email =   str(input("Email Adress      --> "))
+    adress =  str(input("Home Adress       --> "))
+    birth =   str(input("Birthday          --> "))
+    return cls([(surname, name), ide, phone, email, adress, birth])
+```
+Collects guest information from user input and creates a `Guest` object.
+
+
+
 ## **The `Room` class**
 ### Definition
 ```python
@@ -96,13 +169,13 @@ class Room():
 
         if room_data is None:
             room_data = ["NOINFO", 0, 0, 0, 0, 0, 0]
-        self.room_name = room_data[0]
-        self.current_status = room_data[1]
-        self.current_endline = room_data[2]
-        self.next_status = room_data[3]
-        self.next_endline = room_data[4]
-        self.after_status = room_data[5]
-        self.after_endline = room_data[6]
+        self._room_name = room_data[0]
+        self._current_status = room_data[1]
+        self._current_endline = room_data[2]
+        self._next_status = room_data[3]
+        self._next_endline = room_data[4]
+        self._after_status = room_data[5]
+        self._after_endline = room_data[6]
 ```
 As we can see, `Room`'s `__init__`  is represented by `room_data`, a `list`, this is designed like that because by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Room in this project:
 
@@ -119,16 +192,16 @@ As we can see, `Room`'s `__init__`  is represented by `room_data`, a `list`, thi
 You may notice the "An `int` that represents the activity of the room" quote, that refers to one of the atributes those are independent of `room_data`:
 
 ```python
-self.states = ("NOINFO", "AVAILABLE", "RESERVED", "OCCUPIED", "CLEANING", "MAINTENANCE", "DISABLED")
-self.update_board = f" STATUS          TO DO\n
+self._states = ("NOINFO", "AVAILABLE", "RESERVED", "OCCUPIED", "CLEANING", "MAINTENANCE", "DISABLED")
+self._update_board = f" STATUS          TO DO\n
                       {self.states[1]}       press 1\n
                       {self.states[2]}        press 2\n
                       {self.states[3]}        press 3\n
                       {self.states[4]}        press 4\n
                       {self.states[5]}     press 5\n
                       {self.states[6]}        press 6\n"
-self.schedule_message = "Write the days to schedule"
-self.slowdown = "\n\t...\t...\t...\t..."
+self._schedule_message = "Write the days to schedule"
+self._slowdown = "\n\t...\t...\t...\t..."
 ```
 Let's see:
 | `self.` Attribute | Description |
@@ -140,6 +213,15 @@ Let's see:
 
 ### The `Room` Methods
 ```python
+def to_dict(self) -> dict:
+    #...
+    #code
+
+@classmethod
+def from_dict(cls, data_dict: dict): 
+    #...
+    #code
+
 def get_current_status(self) -> str:   
     #...
     #code
@@ -147,15 +229,6 @@ def get_current_status(self) -> str:
 def get_complete_status(self) -> str:
     #...
     #code
-
-def sunrise_protocol(self) -> str:
-    #...
-    #code
-    #...
-    #more code
-    #...
-    #even more code
-    #...
 
 def scheduling_conditions(self, option: int) -> bool:
     #...
@@ -183,20 +256,56 @@ def scheduling_protocol(self, option: int) -> str:
     #...
     #even more code
     #...
-
-def sunset_protocol(self) -> None:
-    #...
-    #code
 ```
-**The complete code is below:**
+- `to_dict(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def to_dict(self) -> dict:
+        return {"room_name": self._room_name,
+                "current_status": self._current_status,
+                "current_endline": self._current_endline,
+                "next_status": self._next_status,
+                "next_endline": self._next_endline,
+                "after_status": self._after_status,
+                "after_endline": self._after_endline}
+  ```
+  Serializes the `Room` object into a dictionary format for the JSON convertion.
+
+
+</p>
+</details>
+
+
+- `from_dict(cls, data_dict)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  @classmethod
+    def from_dict(cls, data_dict: dict):
+        room_data = [data_dict["room_name"],
+                     data_dict["current_status"],
+                     data_dict["current_endline"],
+                     data_dict["next_status"],
+                     data_dict["next_endline"],
+                     data_dict["after_status"],
+                     data_dict["after_endline"]]
+        return cls(room_data)
+  ```
+  Creates a `Room` object from a dictionary in a JSON file.
+
+</p>
+</details>
 
 - `get_current_status(self)`
 <details><summary>Details</summary>
 <p>
   
   ```python
-  def get_current_status(self) -> str:   
-        return f"{self.room_name}: \t {self.states[self.current_status]}."
+  def get_current_status(self) -> str:
+        return f"{self._room_name}:  {self._states[self._current_status]}"
   ```
   Only returns the `current_status` of the room
 
@@ -209,82 +318,11 @@ def sunset_protocol(self) -> None:
 <p>
   
   ```python
-  def get_complete_status(self) -> str:   
-        return f"{self.room_name}:    {self.states[self.current_status]}    {self.current_endline} days left  -->  {self.states[self.next_status]}    {self.next_endline} days next  -->  {self.states[self.after_status]}    {self.after_endline} days after."
+  def get_complete_status(self) -> str:
+        return f"{self._room_name}:    {self._states[self._current_status]}    {self._current_endline} days left  -  {self._states[self._next_status]}    {self._next_endline} days next  -  {self._states[self._after_status]}    {self._after_endline} days after"
 
   ```
   Returns `current_status`, `next_status`, `after_status` and `_endline`'s of the room
-</p>
-</details>
-
-
-- `sunrise_protocol(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def sunrise_protocol(self) -> str:
-        status_update = f"{self.room_name}: no information was found, please check.{self.slowdown}" 
-        
-        if self.current_endline > 0:                                 #returns current_status and current_endline
-            status_update = f"{self.room_name} is {self.states[self.current_status]}, {self.current_endline} days left.{self.slowdown}"
-
-        elif self.current_endline == 0 and self.next_endline > 0:    #current_status finished and next_status exist
-            status_update = f"{self.room_name} went from {self.states[self.current_status]} to {self.states[self.next_status]}.{self.slowdown}"
-            self.current_status, self.current_endline = self.next_status, self.next_endline
-            self.next_status, self.next_endline = self.after_status, self.after_endline
-            self.after_status, self.after_endline = 0, 0
-      
-        elif self.current_endline == 0 and self.next_endline == 0:    #current_status finished and next_state doesn't exist
-            update_notice = int(input(f"{self.room_name} finished {self.states[self.current_status]}, an update is needed:\n{self.update_board}\t\t  --> "))
-
-            if update_notice == 1:      #the room becomes AVAILABLE for one day
-                self.current_status, self.current_endline = 1, 1
-                status_update = f"{self.room_name} is now {self.states[self.current_status]}.{self.slowdown}"
-
-            elif update_notice == 2:     #the room becomes RESERVED, then OCCUPIED
-                schedule_update_1 = int(input(f"{self.states[2]}:  {self.schedule_message}\n  --> "))
-                self.current_status, self.current_endline = 2, schedule_update_1
-                schedule_update_2 = int(input(f"{self.states[3]}:  {self.schedule_message}\n  --> "))
-                self.next_status, self.next_endline = 3, schedule_update_2
-                status_update = f"{self.room_name} is now {self.states[self.current_status]}.{self.slowdown}"
-       
-            elif update_notice == 3:    #the room becomes OCCUPIED, then one CLEANING day
-                schedule_update_1 = int(input(f"{self.states[3]}:  {self.schedule_message}\n  --> "))
-                self.current_status, self.current_endline = 3, schedule_update_1
-                self.next_status, self.next_endline = 4, 1
-                status_update = f"{self.room_name} is now {self.states[self.current_status]}.{self.slowdown}"
-   
-            elif update_notice == 4:    #the room has one CLEANING day, the next one day becomes AVAILABLE
-                self.current_status, self.current_endline = 4, 1
-                self.next_status, self.next_endline = 1, 1
-                status_update = f"{self.room_name} is now {self.states[self.current_status]}.{self.slowdown}"
-
-            elif update_notice == 5:    #the room is now on MAINTENANCE, the next one day becomes CLEANING
-                schedule_update_1 = int(input(f"{self.states[5]}:  {self.schedule_message}\n  --> "))
-                self.current_status, self.current_endline = 5, schedule_update_1
-                self.next_status, self.next_endline = 4, 1
-                status_update = f"{self.room_name} is now {self.states[self.current_status]}.{self.slowdown}"
-           
-            elif update_notice == 6:    #the room is now DISABLED, the following status requires an update
-                schedule_update_1 = int(input(f"{self.states[6]}:  {self.schedule_message}\n  --> "))
-                self.current_status, self.current_endline = 6, schedule_update_1
-                update_notice = int(input(f"{self.room_name} is now {self.states[self.current_status]}, the next status needs to be updated:\n{self.update_board}"))
-                schedule_update_2 = int(input(f"{self.states[update_notice]}:  {self.schedule_message}\n  --> "))
-                self.next_status, self.next_endline = update_notice, schedule_update_2
-                status_update = f"{self.room_name} becomes {self.states[self.current_status]}.{self.slowdown}"
-                
-        return status_update
-
-  ```
-  This one checks if `current_status` has finished, if `next_status` doesn't exist, requires an update.
-  | Variables | Description |
-  | ------------ | ------------ |
-  | `status_update` | Is the method's `str` return, modified by the conditionals |
-  | `update_notice` | An `int(input())`, is the method's conditional |
-  | `schedule_update_1` | An `int(input())`, the new `current_endline` attribute value. |
-  | `schedule_update_2` | An `int(input())`, the new `next_endline` attribute value. |
-
 </p>
 </details>
 
@@ -295,30 +333,48 @@ def sunset_protocol(self) -> None:
   
   ```python
   def scheduling_conditions(self, option: int) -> bool:
-        conditions = {"c_status_eq1__n_endline_eq0": self.current_status == 1 and self.next_endline == 0,
-                      "c_status_geq1__n_endline_eq0": self.current_status >= 1 and self.next_endline == 0,
-                      "n_status_eq1__a_endline_eq0": self.next_status == 1 and self.after_endline == 0,
-                      "n_status_geq1__a_endline_eq0": self.next_status >= 1 and self.after_endline == 0,
-                      "a_status_eq1": self.after_status == 1,
-                      "c_status_eq3__n_endline_eq0": self.current_status == 3 and self.next_endline == 0,
-                      "n_status_eq3__a_endline_eq0": self.next_status == 3 and self.after_endline == 0,
-                      "c_status_neq4__a_endline_eq1": self.current_status != 4 and self.next_status == 1 and self.after_endline == 0,
-                      "n_status_neq4__a_status_eq1": self.next_status != 4 and self.after_status == 1,
-                      "c_status_eq5__n_endline_eq0": self.current_status == 5 and self.next_endline == 0,
-                      "n_status_eq5__a_endline_eq0": self.next_status == 5 and self.after_endline == 0,
-                      "c_status_eq6__n_endline_eq0": self.current_status == 6 and self.next_endline == 0,
-                      "n_status_eq6__a_endline_eq0": self.next_status == 6 and self.after_endline == 0,
-                      "c_status_l6__n_endline_eq0": self.current_status < 6 and self.next_endline == 0,
-                      "n_status_l6__a_endline_eq0": self.next_status < 6 and self.after_endline == 0}
-         
-        conditional_status = [["c_status_eq1__n_endline_eq0", "c_status_geq1__n_endline_eq0", "n_status_eq1__a_endline_eq0"],
-                              ["c_status_eq1__n_endline_eq0", "c_status_geq1__n_endline_eq0", "n_status_eq1__a_endline_eq0", "n_status_geq1__a_endline_eq0", "a_status_eq1"],
-                              ["c_status_eq3__n_endline_eq0", "n_status_eq3__a_endline_eq0", "c_status_eq5__n_endline_eq0", "n_status_eq5__a_endline_eq0", "c_status_eq6__n_endline_eq0", "n_status_eq6__a_endline_eq0"],
-                              ["c_status_eq1__n_endline_eq0", "c_status_neq4__a_endline_eq1", "n_status_neq4__a_status_eq1", "c_status_eq3__n_endline_eq0", "n_status_eq3__a_endline_eq0", "c_status_eq6__n_endline_eq0", "n_status_eq6__a_endline_eq0"],
-                              ["c_status_eq1__n_endline_eq0", "n_status_eq1__a_endline_eq0", "a_status_eq1", "c_status_l6__n_endline_eq0", "n_status_l6__a_endline_eq0"]]
+        schedule_type = (f"{self._room_name}: no information was found, please check", 
+                         f"{self._room_name}: ({self.definition})  -  RIGHT NOW",
+                         f"{self._room_name}: ({self.definition})  -  {self._current_endline} DAYS",
+                         f"{self._room_name}: ({self.definition})  -  {self._current_endline + self._next_endline} DAYS",
+                         f"{self._room_name}:       {self._states[self._current_status]}        -  RIGHT NOW",
+                         f"{self._room_name}:       {self._states[self._current_status]}        -  {self._current_endline} DAYS",
+                         f"{self._room_name}: {self._states[self._current_status]} --- {self._states[self._next_status]}  -  {self._current_endline + self._next_endline} DAYS")
+        schedule_data = schedule_type[0]
 
-        room_conditions = conditional_status[option - 1]
-        return any(conditions[c] for c in room_conditions)
+        conditions = {1: [(self._current_status == 1 and self._next_endline == 0, schedule_type[1]),
+                          (self._current_status >= 1 and self._next_endline == 0, schedule_type[2]),
+                          (self._next_status == 1 and self._after_endline == 0, schedule_type[2])],
+                      2: [(self._current_status == 1 and self._next_endline == 0, schedule_type[1]),
+                          (self._current_status >= 1 and self._next_endline == 0, schedule_type[2]),
+                          (self._next_status == 1 and self._after_endline == 0, schedule_type[2]),
+                          (self._next_status >= 1 and self._after_endline == 0, schedule_type[3]),
+                          (self._after_status == 1, schedule_type[3])],
+                      3: [(self._current_status == 3 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status == 3 and self._after_endline == 0, schedule_type[6]),
+                          (self._current_status == 5 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status == 5 and self._after_endline == 0, schedule_type[6]),
+                          (self._current_status == 6 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status == 6 and self._after_endline == 0, schedule_type[6])],
+                      4: [(self._current_status == 1 and self._next_endline == 0, schedule_type[4]),
+                          (self._next_status == 1 and self._after_endline == 0, schedule_type[5]),
+                          (self._after_status == 1, schedule_type[6]),
+                          (self._current_status == 3 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status == 3 and self._after_endline == 0, schedule_type[6]),
+                          (self._current_status == 6 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status == 6 and self._after_endline == 0, schedule_type[6])],
+                      5: [(self._current_status == 1 and self._next_endline == 0, schedule_type[4]),
+                          (self._next_status == 1 and self._after_endline == 0, schedule_type[5]),
+                          (self._after_status == 1, schedule_type[6]),
+                          (self._current_status < 6 and self._next_endline == 0, schedule_type[5]),
+                          (self._next_status < 6 and self._after_endline == 0, schedule_type[6])]}
+
+        for condition, result in conditions.get(option, []):
+            if condition:
+                schedule_data = result
+                break
+            
+        return schedule_data
   ```
   | Objects | Description |
   | ------------ | ------------ |
@@ -411,146 +467,119 @@ def sunset_protocol(self) -> None:
   
   ```python
   def scheduling_protocol(self, option: int) -> str:
-        status_update = f"{self.room_name}: no information was found, please check.{self.slowdown}"
+        status_update = f"\n{self._room_name}: An error has raised, please try again.{self._slowdown}"
 
-        if option == 1:         #RESERVE
-            #updates one room with the RESERVED status and the subsequent OCCUPIED status
-            schedule_update_1 = int(input(f"{self.states[2]}:  {self.schedule_message}\n  --> "))
-            schedule_update_2 = int(input(f"{self.states[3]}:  {self.schedule_message}\n  --> "))
+        if option == 1:         
+            schedule_update_1 = int(input(f"{self._states[2]}:  {self._schedule_message}\n  --> "))
+            schedule_update_2 = int(input(f"{self._states[3]}:  {self._schedule_message}\n  --> "))
 
-            if self.current_status == 1 and self.next_endline == 0:
-                #the room is AVAILABLE right now and there is no posterior time limit
-                self.current_status, self.current_endline = 2, schedule_update_1
-                self.next_status, self.next_endline = 3, schedule_update_2
+            if self._current_status == 1 and self._next_endline == 0:
+                self._current_status, self._current_endline = 2, schedule_update_1
+                self._next_status, self._next_endline = 3, schedule_update_2
+                
+            elif self._current_status >= 1 and self._next_endline == 0:
+                self._next_status, self._next_endline = 2, schedule_update_1
+                self._after_status, self._after_endline = 3, schedule_update_2
 
-            elif self.current_status >= 1 and self.next_endline == 0:
-                #the room is in a non-AVAILABLE state right now and there is no posterior time limit
-                self.next_status, self.next_endline = 2, schedule_update_1
-                self.after_status, self.after_endline = 3, schedule_update_2
+            elif self._next_status == 1 and self._after_endline == 0:
+                self._next_status, self._next_endline = 2, schedule_update_1
+                self._after_status, self._after_endline = 3, schedule_update_2
 
-            elif self.next_status == 1 and self.after_endline == 0:
-                #the room will be AVAILABLE right after and there is no posterior time limit
-                self.next_status, self.next_endline = 2, schedule_update_1
-                self.after_status, self.after_endline = 3, schedule_update_2
-
-            status_update = f"{self.room_name} has been {self.states[2]}.{self.slowdown}"
+            status_update = f"{self._room_name} has been {self._states[2]}.{self._slowdown}"
             
-        elif option == 2:         #OCCUPY
-            #updates one room with the subsequent OCCUPIED status
-            schedule_update_1 = int(input(f"{self.states[3]}:  {self.schedule_message}\n  --> "))
 
-            if self.current_status == 1 and self.next_endline == 0:
-                #the room current_status is AVAILABLE and next_status has no time limit or is unexistent
-                self.current_status, self.current_endline = 3, schedule_update_1
+        elif option == 2:
+            schedule_update_1 = int(input(f"\n{self._states[3]}:  {self._schedule_message}\n  --> "))
 
-            elif self.current_status >= 1 and self.next_endline == 0:
-                #the room current_status is non-AVAILABLE and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 3, schedule_update_1
+            if self._current_status == 1 and self._next_endline == 0:
+                self._current_status, self._current_endline = 3, schedule_update_1
 
-            elif self.next_status == 1 and self.after_endline == 0:
-                #the room next_status is AVAILABLE and after_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 3, schedule_update_1
+            elif self._current_status >= 1 and self._next_endline == 0:
+                self._next_status, self._next_endline = 3, schedule_update_1
 
-            elif self.next_status >= 1 and self.after_endline == 0:
-                #the room next_status is non-AVAILABLE and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 3, schedule_update_1
+            elif self._next_status == 1 and self._after_endline == 0:
+                self._next_status, self._next_endline = 3, schedule_update_1
 
-            elif self.after_status == 1:
-                #the room after_status is AVAILABLE
-                self.after_status, self.after_endline = 3, schedule_update_1
+            elif self._next_status >= 1 and self._after_endline == 0:
+                self._after_status, self._after_endline = 3, schedule_update_1
 
-            status_update = f"{self.room_name} has been {self.states[3]}.{self.slowdown}"
+            elif self._after_status == 1:
+                self._after_status, self._after_endline = 3, schedule_update_1
 
-        elif option == 3:         #CLEANING
-            #updates one room with the CLEANING status
-            schedule_update_1 = int(input(f"{self.states[4]}:  {self.schedule_message}\n  --> "))
-
-            if self.current_status == 3 and self.next_endline == 0:
-                #the room current_status is OCCUPIED and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 4, schedule_update_1
-
-            elif self.next_status == 3 and self.after_endline == 0:
-                #the room next_status is OCCUPIED and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 4, schedule_update_1
-
-            elif self.current_status == 5 and self.next_endline == 0:
-                #the room current_status is MAINTENANCE and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 4, schedule_update_1
-
-            elif self.next_status == 5 and self.after_endline == 0:
-                #the room next_status is MAINTENANCE and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 4, schedule_update_1
-
-            elif self.current_status == 6 and self.next_endline == 0:
-                #the room current_status is DISABLED and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 4, schedule_update_1
-
-            elif self.next_status == 6 and self.after_endline == 0:
-                #the room next_status is DISABLED and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 4, schedule_update_1
-
-            status_update = f"{self.room_name} has scheduled a {self.states[4]}.{self.slowdown}"
-
-        elif option == 4:         #MAINTENANCE
-            #updates one room with the MAINTENANCE status
-            schedule_update_1 = int(input(f"{self.states[5]}:  {self.schedule_message}\n  --> "))
-
-            if self.current_status == 1 and self.next_endline == 0:
-                #the room current_status is AVAILABLE and next_status has no time limit or is unexistent
-                self.current_status, self.current_endline = 5, schedule_update_1
-
-            elif self.next_status == 1 and self.after_endline == 0:
-                #the room next_status is AVAILABLE and after_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 5, schedule_update_1
-
-            elif self.after_status == 1:
-            #the room after_status is AVAILABLE
-                self.after_status, self.after_endline = 5, schedule_update_1
-
-            elif self.current_status == 3 and self.next_endline == 0:
-                #the room current_status is OCCUPIED and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 5, schedule_update_1
-
-            elif self.next_status == 3 and self.after_endline == 0:
-                #the room next_status is OCCUPIED and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 5, schedule_update_1
-
-            elif self.current_status == 6 and self.next_endline == 0:
-                #the room current_status is DISABLED and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 5, schedule_update_1
-
-            elif self.next_status == 6 and self.after_endline == 0:
-                #the room next_status is DISABLED and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 5, schedule_update_1
-
-            status_update = f"{self.room_name} has scheduled a {self.states[5]}.{self.slowdown}"
+            status_update = f"{self._room_name} has been {self._states[3]}.{self._slowdown}"
 
 
-        elif option == 5:         #DISABLED
-            #updates one room with the DISABLED status
-            schedule_update_1 = int(input(f"{self.states[6]}:  {self.schedule_message}\n  --> "))
+        elif option == 3:
+            schedule_update_1 = int(input(f"\n{self._states[4]}:  {self._schedule_message}\n  --> "))
 
-            if self.current_status == 1 and self.next_endline == 0:
-                #the room current_status is AVAILABLE and next_status has no time limit or is unexistent
-                self.current_status, self.current_endline = 6, schedule_update_1
+            if self._current_status == 3 and self._next_endline == 0:
+                self._next_status, self._next_endline = 4, schedule_update_1
 
-            elif self.next_status == 1 and self.after_endline == 0:
-            #the room next_status is AVAILABLE and after_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 6, schedule_update_1
+            elif self._next_status == 3 and self._after_endline == 0:
+                self._after_status, self._after_endline = 4, schedule_update_1
 
-            elif self.after_status == 1:
-            #the room after_status is AVAILABLE
-                self.after_status, self.after_endline = 6, schedule_update_1
+            elif self._current_status == 5 and self._next_endline == 0:
+                self._next_status, self._next_endline = 4, schedule_update_1
 
-            elif self.current_status < 6 and self.next_endline == 0:
-                #the room current_status is non-DISABLED and next_status has no time limit or is unexistent
-                self.next_status, self.next_endline = 6, schedule_update_1
+            elif self._next_status == 5 and self._after_endline == 0:
+                self._after_status, self._after_endline = 4, schedule_update_1
 
-            elif self.next_status < 6 and self.after_endline == 0:
-                #the room next_status is non-DISABLED and after_status has no time limit or is unexistent
-                self.after_status, self.after_endline = 6, schedule_update_1
+            elif self._current_status == 6 and self._next_endline == 0:
+                self._next_status, self._next_endline = 4, schedule_update_1
 
-            status_update = f"{self.room_name} has been {self.states[6]}.{self.slowdown}"
+            elif self._next_status == 6 and self._after_endline == 0:
+                self._after_status, self._after_endline = 4, schedule_update_1
+
+            status_update = f"{self._room_name} has scheduled a {self._states[4]}.{self._slowdown}"
+
+
+        elif option == 4:
+            schedule_update_1 = int(input(f"\n{self._states[5]}:  {self._schedule_message}\n  --> "))
+
+            if self._current_status == 1 and self._next_endline == 0:
+                self._current_status, self._current_endline = 5, schedule_update_1
+
+            elif self._next_status == 1 and self._after_endline == 0:
+                self._next_status, self._next_endline = 5, schedule_update_1
+
+            elif self._after_status == 1:
+                self._after_status, self._after_endline = 5, schedule_update_1
+
+            elif self._current_status == 3 and self._next_endline == 0:
+                self._next_status, self._next_endline = 5, schedule_update_1
+
+            elif self._next_status == 3 and self._after_endline == 0:
+                self._after_status, self._after_endline = 5, schedule_update_1
+
+            elif self._current_status == 6 and self._next_endline == 0:
+                self._next_status, self._next_endline = 5, schedule_update_1
+
+            elif self._next_status == 6 and self._after_endline == 0:
+                self._after_status, self._after_endline = 5, schedule_update_1
+
+            status_update = f"{self._room_name} has scheduled a {self._states[5]}.{self._slowdown}"
+
+
+        elif option == 5:
+            schedule_update_1 = int(input(f"\n{self._states[6]}:  {self._schedule_message}\n  --> "))
+
+            if self._current_status == 1 and self._next_endline == 0:
+                self._current_status, self._current_endline = 6, schedule_update_1
+
+            elif self._next_status == 1 and self._after_endline == 0:
+                self._next_status, self._next_endline = 6, schedule_update_1
+
+            elif self._after_status == 1:
+                self._after_status, self._after_endline = 6, schedule_update_1
+
+            elif self._current_status < 6 and self._next_endline == 0:
+                self._next_status, self._next_endline = 6, schedule_update_1
+
+            elif self._next_status < 6 and self._after_endline == 0:
+                self._after_status, self._after_endline = 6, schedule_update_1
+
+            status_update = f"{self._room_name} has been {self._states[6]}.{self._slowdown}"
+
 
         return status_update
   ```
@@ -566,19 +595,6 @@ def sunset_protocol(self) -> None:
 </p>
 </details>
 
-
-- `sunset_protocol(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def sunset_protocol(self) -> None:
-        self.current_endline = self.current_endline - 1
-  ```
-  This method by the moment make `current_endline` decrease by one, represents the passing of a day.
-
-</p>
-</details>
 
 ### `Room`'s subclasses
 ```python
@@ -606,320 +622,26 @@ For now are merely placeholders.
 
 
 
+
 ## **The `Hotel` class**
 ### Definition
 ```python
 class Hotel():
-    def __init__(self, hotel_data: tuple[Room, ...] = ()):
-        self.hotel_data = hotel_data
-```
-Pretty simple, an `Hotel` object is composed by a `tuple` of `Room` objects by the `hotel_data` name. 
-
-### The `Hotel` Methods
-```python
-def get_current_status(self) -> None:
-    #...
-    #code
-    #... 
-
-def get_complete_status(self) -> None:
-    #...
-    #code
-    #... 
-
-def sunrise_protocol(self) -> None:
-    #...
-    #code
-    #... 
-
-def sunset_protocol(self) -> None:
-    #...
-    #code
-    #... 
-
-def noon_protocol(self) -> None:
-     #...
-    #code
-    #...
-    #more code
-    #...
-    #even more code
-    #...
-```
-You may notice the method's are apparently identical to the `Room` class methods, let's take a look to the complete code below:
-
-- `get_current_status(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def get_current_status(self) -> None:
-      print("  ROOM            STATUS")
-      for room in self.hotel_data:
-          print(room.get_current_status())
-          time.sleep(1)   
-  ```
-  That's all, it delivers the `room.get_current_status()` for each room of the Hotel!.
-  
-  `time.sleep(1)` is an artificial delay in the method execution for testing quality purposes.
-
-</p>
-</details>
-
-
-- `get_complete_status(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def get_complete_status(self) -> None:
-      print("  ROOM            CURRENT STATUS                  NEXT STATUS                   AFTER STATUS")
-      for room in self.hotel_data:
-          print(room.get_complete_status())
-          time.sleep(1)
-  ```
-  Almost the same concept as above, it delivers the `room.get_complete_status()` for each room of the Hotel.
-
-</p>
-</details>
-
-
-- `sunrise_protocol(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def sunrise_protocol(self) -> None:
-      for room in self.hotel_data:
-          print(room.sunrise_protocol())
-          time.sleep(2)
-  ```
-  This one deploys the `room.sunrise_protocol()` method for each room as a continuous read and write interaction.
-
-</p>
-</details>
-
-
-- `noon_protocol(self)`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  def noon_protocol(self) -> None:
-      option = int(input("\n""         OPTIONS                 TO DO" "\n"
-                         "Reserve a Room                  press 1" "\n"
-                         "Occupy a Room                   press 2" "\n"
-                         "Schedule a Cleaning             press 3" "\n"
-                         "Schedule a Maintenance          press 4" "\n"
-                         "Disable a Room                  press 5" "\n"
-                         "Return                          press 0" "\n"
-                         "                                  -->  "))       
-
-        if option == 0: pass
-
-        if option > 0:                  
-            booking_rooms = []
-            for room in self.hotel_data:
-                if room.scheduling_conditions(option) is True:
-                    booking_rooms.append(room)
-                else: pass
-
-            if len(booking_rooms) > 0:
-                print("  ROOM             INFORMATION             UNTIL      TO DO")
-                for b_room in booking_rooms:
-                    print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
-                    time.sleep(1)
-                book = int(input("Cancel                                                  press 0" "\n"
-                                "                                                       "" -->  "))
-                if book > 0 and book <= len(booking_rooms):
-                    print(booking_rooms[book - 1].scheduling_protocol(option))
-                if book == 0:
-                    pass
-
-            else: print("There are no rooms available to schedule that option.")
-  ```
-  This method integrates `room.scheduling_conditions()`, `room.scheduling_data()` and `room.scheduling_protocol()` in a interactive mess to update in a room one `_status`.
-  
-  **This is how it works:**
-  ```python
-  option = int(input("\n""         OPTIONS                 TO DO" "\n"
-                     "Reserve a Room                  press 1" "\n"
-                     "Occupy a Room                   press 2" "\n"
-                     "Schedule a Cleaning             press 3" "\n"
-                     "Schedule a Maintenance          press 4" "\n"
-                     "Disable a Room                  press 5" "\n"
-                     "Return                          press 0" "\n"
-                     "                                  -->  "))       
-  ```
-  `option` is a `int(input())` with a whole options menu as a argument.
-
-  ```python
-  if option == 0: pass    
-  ```
-  `option == 0` exits the "options menu interface" and goes back to the "main menu interface", we will see it in the `main` file section.
-  
-  ```python
-  if option > 0:                 
-      booking_rooms = []
-      for room in self.hotel_data:
-      if room.scheduling_conditions(option) is True:
-          booking_rooms.append(room)
-      else: pass  
-  ```
-  `booking_rooms` is a `list` composed by the `Room` objects which `scheduling_conditions(option)` is `True`, those are, the rooms that can be scheduled in the status chosen by the user. 
-
-  ```python
-  if len(booking_rooms) > 0:
-      print("  ROOM             INFORMATION             UNTIL      TO DO")
-      for b_room in booking_rooms:
-          print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
-          time.sleep(1)
-  ```
-  This section checks if `booking_rooms` has elements and shows the information provided by `room.scheduling_data(option)` as a options menu of the rooms those can be scheduled.
-
-  ```python
-  book = int(input("Cancel                                                  press 0" "\n"
-                   "                                                       "" -->  "))
-      if book > 0 and book <= len(booking_rooms):
-          print(booking_rooms[book - 1].scheduling_protocol(option))
-      if book == 0:
-          pass
-  ```
-  `book` is the `int(input())` used to "choose" the room to schedule, consequently, shows the `_state` updating information provided by `room.scheduling_protocol(option)` for the chosen room.
-  
-</p>
-</details>    
-
-
-
-## **The `main.py` file**
-### The `main()`
-```python
-from kairos_packages.room_cls import Simple_Room, Double_Room, Twin_Room, Family_Room
-from kairos_packages.hotel_cls import Hotel
-
-def main():
-    print("\t""-------------------""\n""\t""KAIROS HOTEL SYSTEM""\n""\t""-------------------")
-    while True:
-        program = int(input("\n""         OPTIONS                 TO DO" "\n"
-                            "Current Status of the Hotel     press 1" "\n"
-                            "Complete Status of the Hotel    press 2" "\n"
-                            "Check Room Status               press 3" "\n"
-                            "Specific Tasks                  press 4" "\n"
-                            "End the Day                     press 5" "\n"
-                            "Exit                            press 0" "\n"
-                            "\t""\t""\t""\t"" -->  "))
-
-        if program == 0: break    
-
-        elif program == 1:    
-            KAIROS.get_current_status()
-
-        elif program == 2:           
-            KAIROS.get_complete_status()
-                
-        elif program == 3:          
-            KAIROS.sunrise_protocol()
-
-        elif program == 4:            
-            KAIROS.noon_protocol()
-
-        elif program == 5:         
-            KAIROS.sunset_protocol()
-
-if __name__ == "__main__": 
-    main()
-```
-A very simple file, with a `while` loop, that allows to interact continuously with `program` `int(input())`, it has the "main menu" as the argument"
-
-
-# **The json update**
-Looking forward to add a `Person` class became necesary to locate the `KAIROS` `Hotel` and `Room` objects in an external file, instead of being in the `main` file:
-```python
-R101 = Simple_Room(["Room 101", 3, 1, 1, 1, 0, 0])
-R102 = Simple_Room(["Room 102", 2, 2, 3, 3, 0, 0])
-R103 = Double_Room(["Room 103", 4, 1, 5, 2, 0, 0])
-R104 = Double_Room(["Room 104", 3, 3, 2, 1, 3, 4])
-
-R201 = Simple_Room(["Room 201", 3, 0, 4, 1, 0, 0])
-R202 = Simple_Room(["Room 202", 5, 2, 0, 0, 0, 0])
-R203 = Twin_Room(["Room 203", 5, 0, 6, 2, 3, 3])
-R204 = Twin_Room(["Room 204", 0, 0, 0, 0, 0, 0])
-
-R301 = Double_Room(["Room 301", 2, 3, 3, 3, 5, 2])
-R302 = Double_Room(["Room 302", 6, 2, 4, 2, 1, 1])
-R303 = Family_Room(["Room 303", 4, 2, 1, 1, 0, 0])
-R304 = Family_Room(["Room 304", 1, 1, 0, 0, 0, 0])
-
-KAIROS = Hotel((R101, R102, R103, R104, R201, R202, R203, R204, R301, R302, R303, R304))
-```
-So, it was necesary to redefine some aspects of `Hotel` and `Room` class to made the conversion to a **json** compatible format. But first, there is the `Person` class:
-
-## The `Person` class
-**At the moment Person class related methods are only utilized to make Python Objects into json format**
-### Definition
-```python
-class Person():
-    def __init__(self, person_data: list = None):
-        if person_data is None:
-            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain"]
-        self.person_name = person_data[0]
-        self.person_id = person_data[1]
-        self.person_phone = person_data[2]
-        self.person_email = person_data[3]
-
-class Guest(Person):
-    def __init__(self, person_data: list = None):
-        super().__init__(person_data)
-        if person_data is None:
-            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "guest_adress", "mm/dd/yyyy"]
-        self.guest_adress = person_data[4]
-        self.guest_birthday = person_data[5]
-
-class Employee(Person):
-    def __init__(self, person_data: list = None):
-        super().__init__(person_data)
-        if person_data is None:
-            person_data = [("NO_LAST_NAME", "NO_FIRST_NAME"), "id_number", "tel_number", "username@server.domain", "job_title", "employee_code"]
-        self.employee_role = person_data[4]
-        self.employee_id = person_data[5]
-```
-`Person`'s `__init__`  is represented by `person_data`, a `list`, this is designed like that because by the moment, is easier to ad objects to a undetermined length list than define each one at the `__init__`, so let's see what exactly is a Person, Guest and a Employee in this project:
-
-`Person`
-| `Person.person_data` index | `self.` Attribute | Description |
-| ------------ | ------------ | ------------ |
-| `person_data[0]` | `person_name` | A `tuple` that identifies the person last and first name |
-| `person_data[1]` | `person_id` | A `str` that represents the person identification number |
-| `person_data[2]` | `person_phone` | A `str` that represents the person cellphone number |
-| `person_data[3]` | `person_email` | A `str` that represents the person email address |
-
-`Guest`
-| `Guest.person_data` index | `self.` Attribute | Description |
-| ------------ | ------------ | ------------ |
-| `person_data[4]` | `guest_adress` |  A `str` that represents the guest residence address |
-| `person_data[5]` | `guest_birthday` | A `str` that represents the guest birtday date |
-
-`Employee`
-| `Employee.person_data` index | `self.` Attribute | Description |
-| ------------ | ------------ | ------------ |
-| `person_data[4]` | `employee_role` |  A `str` that represents the employee role |
-| `person_data[5]` | `employee_id` | A `str` that represents the employee's id code |
-
-
-## Updated `Hotel` class
-```python
-class Hotel():
     def __init__(self, hotel_data: tuple[Room, ...] = (), employees: dict = None, guests: dict = None):
-        self.hotel_data = hotel_data
-        self.employees = employees
-        self.guests = guests
+        self._hotel_data = hotel_data
+        self._employees = employees
+        self._guests = guests
+    
 ```
 So, the Hotel's employees and guests data are two separated `dict` objects.
 
-### The new actual hotel
-The `Room` objects are unaltered.
+### `Hotel` structure
+The `Room` objects are organized in a `tuple`.
 ```python
+#example
+
+KAIROS = Hotel((R101, R102, R103, R104, R201, R202, R203, R204, R301, R302, R303, R304), employees, guests)
+
 R101 = Simple_Room(["Room 101", 3, 1, 1, 1, 0, 0])
 R102 = Simple_Room(["Room 102", 2, 2, 3, 3, 0, 0])
 R103 = Double_Room(["Room 103", 4, 1, 5, 2, 0, 0])
@@ -938,6 +660,8 @@ R304 = Family_Room(["Room 304", 1, 1, 0, 0, 0, 0])
 
 The `employees` `dict` relates the employee's `employee_role` attribute with the actual `Employee` object.
 ```python
+#example
+
 employees = {"NOINFO": Employee([("NOLASTNAME", "NOFIRSTNAME"), "0000000000", "000-0000", "username@server.domain", "NOINFO", "E000"]),
              "Receptionist": Employee([("Garcia", "Laura"), "0012345678", "555-0101", "laura.garcia@hotel.com", "Receptionist", "E001"]),
              "Housekeeper": Employee([("Smith", "John"), "0023456789", "555-0202", "john.smith@hotel.com", "Housekeeper", "E002"]),
@@ -951,6 +675,8 @@ employees = {"NOINFO": Employee([("NOLASTNAME", "NOFIRSTNAME"), "0000000000", "0
 
 The `guests` `dict` relates the room's `room_name` attribute with three `Person` objects, that represents the by now unexistent attributes `current_person`, `next_person` y `after_person`, related but independent to the `Room` attributes.
 ```python
+#example
+
 guests = {"Room 101": (Guest([("Smith", "John"), "987654321", "555-9876", "john.smith@example.com", "123 Elm St", "03/25/1985"]),
                        employees["Housekeeper"],
                        employees["NOINFO"]),
@@ -989,161 +715,7 @@ guests = {"Room 101": (Guest([("Smith", "John"), "987654321", "555-9876", "john.
                        employees["NOINFO"])}
 ```
 
-## **The json Conversion**
-Each class, now has the brand new `to_dict` and `from_dict` methods:
-- `to_dict`, returns a `dict` version of the object.
-- `from_dict`, returns a conversion of a `dict` into the class object.
-
-### `Person`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  class Guest(Person):
-    def to_dict(self) -> dict:
-        return {"person_name": {"last": self.person_name[0],
-                                "first": self.person_name[1]},
-                "person_id": self.person_id,
-                "person_phone": self.person_phone,
-                "person_email": self.person_email,
-                "guest_adress": self.guest_adress,
-                "guest_birthday": self.guest_birthday}
-    @classmethod
-    def from_dict(cls, data):
-        employee_data = [(data["person_name"]["last"], data["person_name"]["first"]),
-                          data["person_id"],
-                          data["person_phone"],
-                          data["person_email"],
-                          data["guest_adress"],
-                          data["guest_birthday"]]
-        return cls(employee_data)
-
-
-class Employee(Person):
-    def to_dict(self) -> dict:
-        return {"person_name": self.person_name,
-                "person_id": self.person_id,
-                "person_phone": self.person_phone,
-                "person_email": self.person_email,
-                "employee_role": self.employee_role,
-                "employee_id": self.employee_id}
-    @classmethod
-    def from_dict(cls, data):
-        employee_data = [data["person_name"],
-                            data["person_id"],
-                            data["person_phone"],
-                            data["person_email"],
-                            data["employee_role"],
-                            data["employee_id"]]
-        return cls(employee_data)
-  ```
-
-</p>
-</details>
-
-
-### `Room`
-<details><summary>Details</summary>
-<p>
-  
-  ```python
-  class Room():
-    def to_dict(self) -> dict:
-        return {"room_name": self.room_name,
-                "current_status": self.current_status,
-                "current_endline": self.current_endline,
-                "next_status": self.next_status,
-                "next_endline": self.next_endline,
-                "after_status": self.after_status,
-                "after_endline": self.after_endline}
-    @classmethod
-    def from_dict(cls, data_dict):
-        room_data = [data_dict["room_name"],
-                     data_dict["current_status"],
-                     data_dict["current_endline"],
-                     data_dict["next_status"],
-                     data_dict["next_endline"],
-                     data_dict["after_status"],
-                     data_dict["after_endline"]]
-        return cls(room_data)
-  ```
-
-</p>
-</details>
-
-
-### `Hotel`
-<details><summary>Details</summary>
-<p>
-  This the most complex of all, enables the whole conversion of the hotel.
-    
-  ```python
-  class Hotel():   
-    def to_dict(self) -> dict:
-        return {"hotel_data": [room.to_dict() for room in self.hotel_data], 
-                "employees": {role: emp.to_dict() for role, emp in self.employees.items()},
-                "guests": {room_name: [guest.to_dict() if isinstance(guest, Guest) else {"employee_role": guest.employee_role} for guest in guests_list]
-                           for room_name, guests_list in self.guests.items()}}
-    @classmethod
-    def from_dict(cls, data_dict):
-        room_objects = []
-        for room_data in data_dict["hotel_data"]:
-            room_type = room_data.pop("type")
-            if room_type == "Simple_Room":
-                room_objects.append(Simple_Room.from_dict(room_data))
-            elif room_type == "Double_Room":
-                room_objects.append(Double_Room.from_dict(room_data))
-            elif room_type == "Twin_Room":
-                room_objects.append(Twin_Room.from_dict(room_data))
-            elif room_type == "Family_Room":
-                room_objects.append(Family_Room.from_dict(room_data))
-            else:
-                raise ValueError(f"Unknown room type: {room_type}")
-            
-        employees = {role: Employee.from_dict(emp_data) for role, emp_data in data_dict.get("employees", {}).items()}
-        
-        guests = {}
-        for room_name, guests_list in data_dict.get("guests", {}).items():
-            guests[room_name] = []
-            for guest_data in guests_list:
-                if "employee_role" in guest_data:
-                    # Find the employee object by matching employee role
-                    employee = next(emp for emp in employees.values() if emp.employee_role == guest_data["employee_role"])
-                    guests[room_name].append(employee)
-                else:
-                    guests[room_name].append(Guest.from_dict(guest_data))
-
-        return cls(tuple(room_objects), employees, guests)
-  ```
-
-</p>
-</details>
-
-
-### **The Actual json conversion**
-```python
-import json
-from kairos_packages.room_cls import Simple_Room, Double_Room, Twin_Room, Family_Room
-from kairos_packages.hotel_cls import Hotel
-from kairos_packages.person_cls import Guest, Employee
-
-def main():
-    while True:
-        program = int(input("))
-        elif program == 5:            #end the "day" + JSON TEST      
-            with open('KAIROS_data.json', 'r+') as json_file:          
-                KAIROS_data = KAIROS.to_dict()    
-                json.dump(KAIROS_data, json_file, indent=4)
-                KAIROS.sunset_protocol()
-
-if __name__ == "__main__": 
-    main()
-```
-
-As you can see, if `program == 5 is True` appears three new lines of code, in this case based on "The new actual hotel" information located in the `main` file, that does the `Hotel` class conversion to `dict` and with that object, builds a **.json** file.
-
-
-<details><summary>KAIROS_data.json</summary>
+<details><summary>JSON Representation</summary>
 <p>  
     
   ```json
@@ -1592,10 +1164,1040 @@ As you can see, if `program == 5 is True` appears three new lines of code, in th
 </details>
 
 
+
+
+### The `Hotel` Methods
+```python
+def to_dict(self) -> dict:
+    #...
+    #code
+
+@classmethod
+def from_dict(cls, data_dict: dict): 
+    #...
+    #code
+
+def get_current_status(self) -> None:
+    #...
+    #code
+    #... 
+
+def get_complete_status(self) -> None:
+    #...
+    #code
+    #... 
+
+def sunrise_protocol(self) -> None:
+    #...
+    #code
+    #... 
+
+def sunset_protocol(self) -> None:
+    #...
+    #code
+    #... 
+
+def noon_protocol(self) -> None:
+    #...
+    #code
+    #...
+    #more code
+    #...
+    #even more code
+    #...
+
+def sunset_protocol(self) -> None:
+    #...
+    #code
+        
+def midnight_protocol(self) -> None:
+    #...
+    #code
+    #...
+    #more code
+    #...
+    #even more code
+    #...
+
+def get_daily_report(self, date: datetime) -> str:
+    #...
+    #code
+    #...
+    #more code
+    #...
+    #even more code
+    #...
+```
+You may notice the method's are apparently identical to the `Room` class methods, let's take a look to the complete code below:
+
+- `to_dict(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def to_dict(self) -> dict:
+        return {"hotel_data": [room.to_dict() for room in self._hotel_data], 
+                "employees": {role: emp.to_dict() for role, emp in self._employees.items()},
+                "guests": {room_name: [guest.to_dict() if isinstance(guest, Guest) else {"employee_role": guest._employee_role} for guest in guests_list]
+                           for room_name, guests_list in self._guests.items()}}
+  ```
+  Serializes the `Hotel` object into a dictionary format for the JSON convertion.
+
+</p>
+</details>
+
+
+- `from_dict(cls, data_dict)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  @classmethod
+    def from_dict(cls, data_dict: dict):
+        room_objects = []
+        for room_data in data_dict["hotel_data"]:
+            room_type = room_data.pop("type")
+            if room_type == "Simple_Room":
+                room_objects.append(Simple_Room.from_dict(room_data))
+            elif room_type == "Double_Room":
+                room_objects.append(Double_Room.from_dict(room_data))
+            elif room_type == "Twin_Room":
+                room_objects.append(Twin_Room.from_dict(room_data))
+            elif room_type == "Family_Room":
+                room_objects.append(Family_Room.from_dict(room_data))
+            else:
+                raise ValueError(f"Unknown room type: {room_type}")
+            
+        employees = {role: Employee.from_dict(emp_data) for role, emp_data in data_dict.get("employees", {}).items()}
+        
+        guests = {}
+        for room_name, guests_list in data_dict.get("guests", {}).items():
+            guests[room_name] = []
+            for guest_data in guests_list:
+                if "employee_role" in guest_data:
+                    employee = next(emp for emp in employees.values() if emp._employee_role == guest_data["employee_role"])
+                    guests[room_name].append(employee)
+                else:
+                    guests[room_name].append(Guest.from_dict(guest_data))
+
+        return cls(tuple(room_objects), employees, guests)   
+  ```
+  Creates a `Hotel` object from a dictionary in a JSON file.
+
+</p>
+</details>
+
+
+- `get_current_status(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def get_current_status(self) -> None:
+      while True:
+            clear_console()
+            print("  ROOM       STATUS      MORE INFO")
+            for room in self._hotel_data:
+                print(f"{room.get_current_status()}  -->  press {(self._hotel_data.index(room)) + 1}")
+                time.sleep(1)
+
+            try:
+                check = int(input("Continue                  press 0" "\n"
+                                  "                         ""  -->  "))
+                  
+                if check > 0 and check <= len(self._hotel_data):
+                    requested = self._hotel_data[check - 1]
+                    returned = self._guests[requested._room_name]
+
+                    stat_1_report = f"CURRENT STATUS  -  {requested._states[requested._current_status]}"
+                    if requested._current_status > 0: 
+                        if isinstance(returned[0], Guest):
+                            stat_1_report += f"  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}  -  {returned[0]._person_phone}"
+                        elif isinstance(returned[0], Employee):
+                            stat_1_report += f"  -  {returned[0]._employee_role}  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}"    
+                    else: pass
+
+                    time.sleep(1)
+                    clear_console()   
+                    print(f"   {requested._room_name}\n{stat_1_report}\n")
+                    time.sleep(3)
+                    break
+
+                elif check == 0: break
+                else: raise IntInputError(f"Press a number between 0 and {len(self._hotel_data)}")
+
+            except IntInputError as error: 
+                print(f"\n{error}, Returning.\n\n")
+                time.sleep(2)
+            except ValueError: 
+                print("\nPress numbers only, Returning.\n\n")
+                time.sleep(2)   
+  ```
+  It delivers the `room.get_current_status()` for each room of the `Hotel`, with an option to see who is using or in charge of one of them.
+  `clear_console()` "resets" the user interface.
+  `time.sleep(2)` is an artificial delay in the method execution for testing quality purposes.
+
+</p>
+</details>
+
+
+- `get_complete_status(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def get_complete_status(self) -> None:
+      while True:
+            clear_console()
+            print("  ROOM            CURRENT STATUS                NEXT STATUS                 AFTER STATUS         MORE INFO")
+            for room in self._hotel_data:
+                print(f"{room.get_complete_status()}  -->  press {(self._hotel_data.index(room)) + 1}")
+                time.sleep(1)
+
+            try:
+                check = int(input("Continue                                                                                          press 0""\n"
+                                  "                                                                                                   -->  "))     
+                
+                if check > 0 and check <= len(self._hotel_data):
+                    requested = self._hotel_data[check - 1]
+                    returned = self._guests[requested._room_name]
+
+                    stat_1_report = f"CURRENT STATUS  -  {requested._states[requested._current_status]}"
+                    if requested._current_status > 0: 
+                        if isinstance(returned[0], Guest):
+                            stat_1_report += f"  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}  -  {returned[0]._person_phone}"
+                        elif isinstance(returned[0], Employee):
+                            stat_1_report += f"  -  {returned[0]._employee_role}  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}"    
+                    else: pass
+
+                    stat_2_report = f"NEXT STATUS     -  {requested._states[requested._next_status]}"
+                    if requested._next_status > 0: 
+                        if isinstance(returned[1], Guest):
+                            stat_2_report += f"  -  {returned[1]._person_name[1]} {returned[1]._person_name[0]}  -  {returned[1]._person_phone}"
+                        elif isinstance(returned[1], Employee):
+                            stat_2_report += f"  -  {returned[1]._employee_role}  -  {returned[1]._person_name[1]} {returned[1]._person_name[0]}"
+                    else: pass
+
+                    stat_3_report = f"AFTER STATUS    -  {requested._states[requested._after_status]}"
+                    if requested._after_status > 0: 
+                        if isinstance(returned[2], Guest):
+                            stat_3_report += f"  -  {returned[2]._person_name[1]} {returned[2]._person_name[0]}  -  {returned[2]._person_phone}"
+                        elif isinstance(returned[2], Employee):
+                            stat_3_report += f"  -  {returned[2]._employee_role}  -  {returned[2]._person_name[1]} {returned[2]._person_name[0]}"
+                    else: pass
+
+                    time.sleep(1.5)
+                    clear_console()   
+                    print(f"   {requested._room_name}\n{stat_1_report}\n{stat_2_report}\n{stat_3_report}\n")
+                    time.sleep(4.5)
+                    break
+
+                elif check == 0: break
+                else: raise IntInputError(f"Press a number between 0 and {len(self._hotel_data)}")
+
+            except IntInputError as error: 
+                print(f"\n{error}, Returning.\n\n")
+                time.sleep(2)
+            except ValueError: 
+                print("\nPress numbers only, Returning.\n\n")
+                time.sleep(2)
+  ```
+  Almost the same concept as above, it delivers the `room.get_complete_status()` for each room of the Hotel, with an option to see who is using or in charge of one of them in all status.
+
+</p>
+</details>
+
+
+- `sunrise_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def sunrise_protocol(self) -> None:
+      for room in self._hotel_data:
+            status_update = f"{room._room_name}: An error has raised, please Check Room Status again.{room._slowdown}"
+
+            if room._current_endline > 0:
+                status_update = f"{room._room_name} is {room._states[room._current_status]}, {room._current_endline} days left.{room._slowdown}"
+
+
+            elif room._current_endline == 0 and room._next_endline > 0:
+                status_update = f"{room._room_name} went from {room._states[room._current_status]} to {room._states[room._next_status]}.{room._slowdown}"
+
+                room._current_status, room._current_endline = room._next_status, room._next_endline
+                self._guests[room._room_name][0] = self._guests[room._room_name][1]
+
+                room._next_status, room._next_endline = room._after_status, room._after_endline
+                self._guests[room._room_name][1] = self._guests[room._room_name][2]
+
+                room._after_status, room._after_endline = 0, 0
+                self._guests[room._room_name][2] = self._employees["NOINFO"] 
+
+
+            elif room._current_endline == 0 and room._next_endline == 0:
+                try:
+                    update_notice = int(input(f"{room._room_name} finished {room._states[room._current_status]}, an update is needed:\n{room._update_board}\t\t  --> "))
+
+                    if update_notice == 1:
+                        self._guests[room._room_name][0] = self._employees["Housekeeper"]
+                        room._current_status, room._current_endline = 1, 1    
+                        status_update = f"{room._room_name} is now {room._states[room._current_status]}.{room._slowdown}"
+                        
+
+                    elif update_notice == 2:
+                        update_person = Guest.registration()
+
+                        schedule_update_1 = int(input(f"{room._states[2]}:  {room._schedule_message}\n  --> "))
+                        room._current_status, room._current_endline = 2, schedule_update_1
+                        self._guests[room._room_name][0] = update_person
+
+                        schedule_update_2 = int(input(f"{room._states[3]}:  {room._schedule_message}\n  --> "))
+                        room._next_status, room._next_endline = 3, schedule_update_2
+                        self._guests[room._room_name][1] = update_person
+
+                        status_update = f"{room._room_name} is now {room._states[room._current_status]}.{room._slowdown}"
+
+
+                    elif update_notice == 3:
+                        update_person = Guest.registration()    
+
+                        schedule_update_1 = int(input(f"{room._states[3]}:  {room._schedule_message}\n  --> "))
+                        room._current_status, room._current_endline = 3, schedule_update_1
+                        self._guests[room._room_name][0] = update_person
+
+                        room._next_status, room._next_endline = 4, 1
+                        self._guests[room._room_name][1] = self._employees["Concierge"]
+
+                        status_update = f"{room._room_name} is now {room._states[room._current_status]}.{room._slowdown}"
+
+
+                    elif update_notice == 4:
+                        room._current_status, room._current_endline = 4, 1
+                        self._guests[room._room_name][0] = self._employees["Concierge"]
+
+                        room._next_status, room._next_endline = 1, 1
+                        self._guests[room._room_name][1] = self._employees["Housekeeper"]
+
+                        status_update = f"{room._room_name} is now {room._states[room._current_status]}.{room._slowdown}"
+
+
+                    elif update_notice == 5:
+                        schedule_update_1 = int(input(f"{room._states[5]}:  {room._schedule_message}\n  --> "))
+                        room._current_status, room._current_endline = 5, schedule_update_1
+                        self._guests[room._room_name][0] = self._employees["Maintenance Worker"]
+
+                        room._next_status, room._next_endline = 4, 1
+                        self._guests[room._room_name][1] = self._employees["Concierge"]
+
+                        status_update = f"{room._room_name} is now {room._states[room._current_status]}.{room._slowdown}"
+
+
+                    elif update_notice == 6:
+                        schedule_update_1 = int(input(f"{room._states[6]}:  {room._schedule_message}\n  --> "))
+                        room._current_status, room._current_endline = 6, schedule_update_1
+                        self._guests[room._room_name][0] = self._employees["Front Desk Manager"]
+
+                        status_update = f"{room._room_name} becomes {room._states[room._current_status]}.{room._slowdown}"
+                    
+                    else: raise IntInputError("Press a number between 1 and 6.")
+                
+                except IntInputError as error: 
+                    print(f"\n{error}")
+                    time.sleep(2)
+                except ValueError: 
+                    print("\nPress numbers only.")
+                    time.sleep(2)
+
+            print(status_update)
+            time.sleep(1.5)
+  ```
+  This one checks if `current_status` has finished, if `next_status` doesn't exist, requires an update.
+  | Variables | Description |
+  | ------------ | ------------ |
+  | `status_update` | Is the method's `str` return, modified by the conditionals |
+  | `update_notice` | An `int(input())`, is the method's conditional |
+  | `schedule_update_1` | An `int(input())`, the new `current_endline` attribute value. |
+  | `schedule_update_2` | An `int(input())`, the new `next_endline` attribute value. |
+
+</p>
+</details>
+
+
+- `noon_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def noon_protocol(self) -> None:
+      while True:
+            clear_console()
+            try:
+                option = int(input("\n""     SPECIFIC TASKS              TO GO" "\n"
+                                "Reserve a Room                  press 1" "\n"
+                                "Occupy a Room                   press 2" "\n"
+                                "Schedule a Cleaning             press 3" "\n"
+                                "Schedule a Maintenance          press 4" "\n"
+                                "Disable a Room                  press 5" "\n"
+                                "Return                          press 0" "\n"
+                                "                                 -->  "))       
+
+                if option == 0: break
+
+                elif option > 0 and option <= 5:
+                    booking_rooms = []
+                    for room in self._hotel_data:
+                        if room.scheduling_conditions(option) is True:
+                            booking_rooms.append(room)
+                        else: pass
+
+                    if len(booking_rooms) > 0:
+                        while True:
+                            clear_console()
+                            print("  ROOM             INFORMATION           UNTIL        TO DO")
+                            for b_room in booking_rooms:
+                                print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
+                                time.sleep(1)
+
+                            try:
+                                book = int(input("Cancel                                                press 0" "\n"
+                                                "                                                       -->  "))
+                                
+                                if book > 0 and book <= len(booking_rooms):
+                                    reg_1 = booking_rooms[book - 1]._current_status
+                                    reg_2 = booking_rooms[book - 1]._next_status
+                                    reg_3 = booking_rooms[book - 1]._after_status
+
+                                    if option == 1:
+                                        booking_person = Guest.registration()
+                                        print(booking_rooms[book - 1].scheduling_protocol(option))
+                                        if booking_rooms[book - 1]._current_status != reg_1: 
+                                            self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                                        if booking_rooms[book - 1]._next_status != reg_2:
+                                            self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                                        if booking_rooms[book - 1]._after_status != reg_3:
+                                            self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+
+                                    elif option == 2:
+                                        booking_person = Guest.registration()
+                                        print(booking_rooms[book - 1].scheduling_protocol(option))
+                                        if booking_rooms[book - 1]._current_status != reg_1: 
+                                            self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                                        elif booking_rooms[book - 1]._next_status != reg_2:
+                                            self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                                        elif booking_rooms[book - 1]._after_status != reg_3:
+                                            self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+
+                                    elif option == 3:
+                                        booking_person = self._employees["Concierge"]
+                                        print(booking_rooms[book - 1].scheduling_protocol(option))
+                                        if booking_rooms[book - 1]._current_status != reg_1: 
+                                            self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                                        elif booking_rooms[book - 1]._next_status != reg_2:
+                                            self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                                        elif booking_rooms[book - 1]._after_status != reg_3:
+                                            self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+                                    
+                                    elif option == 4:
+                                        booking_person = self._employees["Maintenance Worker"]
+                                        print(booking_rooms[book - 1].scheduling_protocol(option))
+                                        if booking_rooms[book - 1]._current_status != reg_1: 
+                                            self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                                        elif booking_rooms[book - 1]._next_status != reg_2:
+                                            self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                                        elif booking_rooms[book - 1]._after_status != reg_3:
+                                            self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+
+                                    elif option == 5:
+                                        booking_person = self._employees["Front Desk Manager"]
+                                        print(booking_rooms[book - 1].scheduling_protocol(option))
+                                        if booking_rooms[book - 1]._current_status != reg_1: 
+                                            self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                                        elif booking_rooms[book - 1]._next_status != reg_2:
+                                            self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                                        elif booking_rooms[book - 1]._after_status != reg_3:
+                                            self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+                                    
+                                    break
+
+                                elif book == 0: break
+                                else: raise IntInputError(f"Press a number between 0 and {len(booking_rooms)}, Returning.")
+
+                            except IntInputError as error: 
+                                print(f"\n{error}\n\n")
+                                time.sleep(2)
+                            except ValueError: 
+                                print("\nPress numbers only, Returning.\n\n")
+                                time.sleep(2)
+
+
+                    else: 
+                        print("There are no rooms available to schedule that option.")
+                        time.sleep(2)
+
+                else: raise IntInputError("Press a number between 0 and 5, Returning.")
+                    
+            except IntInputError as error: 
+                print(f"\n{error}\n\n")
+                time.sleep(2)
+            except ValueError: 
+                print("\nPress numbers only, Returning.\n\n")
+                time.sleep(2)
+  ```
+  This method integrates `room.scheduling_conditions()`, `room.scheduling_data()` and `room.scheduling_protocol()` in a interactive mess to update in a room one `_status`.
+  
+  **This is how it works:**
+  ```python
+  option = int(input("\n""         OPTIONS                 TO DO" "\n"
+                     "Reserve a Room                  press 1" "\n"
+                     "Occupy a Room                   press 2" "\n"
+                     "Schedule a Cleaning             press 3" "\n"
+                     "Schedule a Maintenance          press 4" "\n"
+                     "Disable a Room                  press 5" "\n"
+                     "Return                          press 0" "\n"
+                     "                                  -->  "))       
+  ```
+  `option` is a `int(input())` with a whole options menu as a argument.
+
+  ```python
+  if option == 0: break    
+  ```
+  `option == 0` exits the "options menu interface" and goes back to the "main menu interface", we will see it in the `main` file section.
+  
+  ```python
+  elif option > 0 and option <= 5:
+        booking_rooms = []
+        for room in self._hotel_data:
+            if room.scheduling_conditions(option) is True:
+                booking_rooms.append(room)
+            else: pass
+  ```
+  `booking_rooms` is a `list` composed by the `Room` objects which `scheduling_conditions(option)` is `True`, those are, the rooms that can be scheduled in the status chosen by the user. 
+
+  ```python
+  if len(booking_rooms) > 0:
+      print("  ROOM             INFORMATION             UNTIL      TO DO")
+      for b_room in booking_rooms:
+          print(f"{b_room.scheduling_data(option)}  -->  press {(booking_rooms.index(b_room) + 1)}")
+          time.sleep(1)
+  ```
+  This section checks if `booking_rooms` has elements and shows the information provided by `room.scheduling_data(option)` as a options menu of the rooms those can be scheduled.
+
+  ```python
+  book = int(input("Cancel                                                press 0" "\n"
+                                                "                                                       -->  "))
+                                
+        if book > 0 and book <= len(booking_rooms):
+            reg_1 = booking_rooms[book - 1]._current_status
+            reg_2 = booking_rooms[book - 1]._next_status
+            reg_3 = booking_rooms[book - 1]._after_status
+    
+            if option == 1:
+                booking_person = Guest.registration()
+                print(booking_rooms[book - 1].scheduling_protocol(option))
+                if booking_rooms[book - 1]._current_status != reg_1: 
+                    self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                if booking_rooms[book - 1]._next_status != reg_2:
+                    self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                if booking_rooms[book - 1]._after_status != reg_3:
+                    self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+    
+            elif option == 2:
+                booking_person = Guest.registration()
+                print(booking_rooms[book - 1].scheduling_protocol(option))
+                if booking_rooms[book - 1]._current_status != reg_1: 
+                    self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                elif booking_rooms[book - 1]._next_status != reg_2:
+                    self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                elif booking_rooms[book - 1]._after_status != reg_3:
+                    self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+    
+            elif option == 3:
+                booking_person = self._employees["Concierge"]
+                print(booking_rooms[book - 1].scheduling_protocol(option))
+                if booking_rooms[book - 1]._current_status != reg_1: 
+                    self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                elif booking_rooms[book - 1]._next_status != reg_2:
+                    self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                elif booking_rooms[book - 1]._after_status != reg_3:
+                    self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+            
+            elif option == 4:
+                booking_person = self._employees["Maintenance Worker"]
+                print(booking_rooms[book - 1].scheduling_protocol(option))
+                if booking_rooms[book - 1]._current_status != reg_1: 
+                    self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                elif booking_rooms[book - 1]._next_status != reg_2:
+                    self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                elif booking_rooms[book - 1]._after_status != reg_3:
+                    self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+    
+            elif option == 5:
+                booking_person = self._employees["Front Desk Manager"]
+                print(booking_rooms[book - 1].scheduling_protocol(option))
+                if booking_rooms[book - 1]._current_status != reg_1: 
+                    self._guests[booking_rooms[book - 1]._room_name][0] = booking_person
+                elif booking_rooms[book - 1]._next_status != reg_2:
+                    self._guests[booking_rooms[book - 1]._room_name][1] = booking_person
+                elif booking_rooms[book - 1]._after_status != reg_3:
+                    self._guests[booking_rooms[book - 1]._room_name][2] = booking_person
+            
+            break
+  ```
+  `book` is the `int(input())` used to "choose" the room to schedule, consequently, requests the guest registration, finally shows the `_state` updating information provided by `room.scheduling_protocol(option)` for the chosen room.
+  
+</p>
+</details>    
+
+
+
+- `sunset_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def sunset_protocol(self) -> None:
+      for room in self._hotel_data:
+            room._current_endline = room._current_endline - 1
+        time.sleep(2)
+  ```
+  The sunset_protocol method is responsible for decrementing the `current_endline` value of each `Room` object in the `Hotel` by one. This simulates the passage of a day. 
+
+</p>
+</details>
+
+
+- `midnight_protocol(self)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  def midnight_protocol(self) -> None:
+      while True:
+            clear_console()
+            print("\n""  ROOM        CURRENT        NEXT        AFTER       TO CHOOSE")
+            for room in self._hotel_data:                                                                                
+                print(f"{room._room_name}:    {room._states[room._current_status]}  -  {room._states[room._next_status]}  -  {room._states[room._after_status]}  -->  press {(self._hotel_data.index(room)) + 1}")
+                time.sleep(1)
+    
+            try:
+                check = int(input("Return                                               press 0""\n"
+                                   "                                                      -->  "))
+    
+                if check > 0 and check <= len(self._hotel_data):
+                    requested = self._hotel_data[check - 1]
+                    returned = self._guests[requested._room_name]
+    
+                    stat_1_report = f"CURRENT STATUS  -  {requested._states[requested._current_status]}"
+                    if requested._current_status > 0: 
+                        if isinstance(returned[0], Guest):
+                            stat_1_report += f"  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}\tpress 1"
+                        elif isinstance(returned[0], Employee):
+                            stat_1_report += f"  -  {returned[0]._employee_role}\tpress 1"    
+                    else: stat_1_report += "\t\t\tpress 1"
+    
+    
+                    stat_2_report = f"NEXT STATUS     -  {requested._states[requested._next_status]}"
+                    if requested._next_status > 0: 
+                        if isinstance(returned[1], Guest):
+                            stat_2_report += f"  -  {returned[1]._person_name[1]} {returned[1]._person_name[0]}\tpress 2"
+                        elif isinstance(returned[1], Employee):
+                            stat_2_report += f"  -  {returned[1]._employee_role}\tpress 2"
+                    else: stat_2_report += "\t\t\tpress 2"
+    
+    
+                    stat_3_report = f"AFTER STATUS    -  {requested._states[requested._after_status]}"
+                    if requested._after_status > 0: 
+                        if isinstance(returned[2], Guest):
+                            stat_3_report += f"  -  {returned[2]._person_name[1]} {returned[2]._person_name[0]}\tpress 3"
+                        elif isinstance(returned[2], Employee):
+                            stat_3_report += f"  -  {returned[2]._employee_role}\tpress 3"
+                    else: stat_3_report += "\t\t\tpress 3"
+    
+                    time.sleep(1.5)
+                    clear_console()
+                    print(f"   {requested._room_name}\n{stat_1_report}\n{stat_2_report}\n{stat_3_report}")
+    
+                    try:
+                        cancel_1 = int(input("Return                                          press 0""\n"
+                                           "                                                 -->  "))
+    
+                        if cancel_1 == 1:
+                            status_update = f"{requested._room_name} CURRENT STATUS "
+    
+                            if requested._next_endline == 0 and requested._after_endline == 0:
+                                self._guests[requested._room_name][0] = self._employees["Housekeeper"]
+                                requested._current_status, requested._current_endline = 1, 1           
+                                status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+                            
+                            else:
+                                try:
+                                    cancel_2 = int(input("To advance the schedule    press 1""\n"
+                                                         "To conserve the schedule   press 2""\n"
+                                                         "                            -->  "))
+    
+                                    if cancel_2 == 1:
+                                        requested._current_status, requested._current_endline = requested._next_status, requested._next_endline
+                                        self._guests[requested._room_name][0] = self._guests[requested._room_name][1]
+    
+                                        requested._next_status, requested._next_endline = requested._after_status, requested._after_endline
+                                        self._guests[requested._room_name][1] = self._guests[requested._room_name][2]
+    
+                                        requested._after_status, requested._after_endline = 0, 0
+                                        self._guests[requested._room_name][2] = self._employees["NOINFO"] 
+    
+                                        status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+       
+                                    elif cancel_2 == 2:
+                                        requested._current_status = 6
+                                        self._guests[requested._room_name][0] = self._employees["Front Desk Manager"]
+                                        status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+    
+                                except IntInputError as error: 
+                                    print(f"\n{error}, Returning.\n\n")
+                                    time.sleep(2)
+                                except ValueError: 
+                                    print("\nPress numbers only, Returning.\n\n")
+                                    time.sleep(2)
+    
+    
+                        elif cancel_1 == 2:
+                            status_update = f"{requested._room_name} NEXT STATUS "
+    
+                            if requested._after_endline == 0:
+                                self._guests[requested._room_name][1] = self._employees["Housekeeper"]
+                                requested._next_status, requested._next_endline = 1, 1           
+                                status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+                            
+                            else:
+                                try:
+                                    cancel_2 = int(input("To advance the schedule    press 1""\n"
+                                                         "To conserve the schedule   press 2""\n"
+                                                         "                            -->  "))
+    
+                                    if cancel_2 == 1:
+                                        requested._next_status, requested._next_endline = requested._after_status, requested._after_endline
+                                        self._guests[requested._room_name][1] = self._guests[requested._room_name][2]
+    
+                                        requested._after_status, requested._after_endline = 0, 0
+                                        self._guests[requested._room_name][2] = self._employees["NOINFO"] 
+    
+                                        status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+       
+                                    elif cancel_2 == 2:
+                                        requested._next_status = 6
+                                        self._guests[requested._room_name][1] = self._employees["Front Desk Manager"]
+                                        status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+    
+                                except IntInputError as error: 
+                                    print(f"\n{error}, Returning.\n\n")
+                                    time.sleep(2)
+                                except ValueError: 
+                                    print("\nPress numbers only, Returning.\n\n")
+                                    time.sleep(2)
+    
+    
+                        elif cancel_1 == 3:
+                            status_update = f"{requested._room_name} AFTER STATUS "
+    
+                            self._guests[requested._room_name][2] = self._employees["Housekeeper"]
+                            requested._after_status, requested._after_endline = 1, 1           
+                            status_update += f"has been canceled.\n{requested._room_name} AFTER STATUS is now {requested._states[requested._after_status]}.\n\n"
+                            
+                        elif cancel_1 == 0: break
+                        else: raise IntInputError(f"Press a number between 0 and 3")
+    
+                        print(status_update)
+                        time.sleep(2)
+                        break
+    
+                    except IntInputError as error: 
+                        print(f"\n{error}, Returning.\n\n")
+                        time.sleep(2)
+                    except ValueError: 
+                        print("\nPress numbers only, Returning.\n\n")
+                        time.sleep(2)
+                    
+                elif check == 0: break
+                else: raise IntInputError(f"Press a number between 0 and {len(self._hotel_data)}")
+            
+            except IntInputError as error: 
+                print(f"\n{error}, Returning.\n\n")
+                time.sleep(2)
+            except ValueError: 
+                print("\nPress numbers only, Returning.\n\n")
+                time.sleep(2)
+  ```
+  This method it's uded to cancel an especific status of one room, pretty long.
+  
+  **This is how it works:**
+  ```python
+  print("\n""  ROOM        CURRENT        NEXT        AFTER       TO CHOOSE")
+        for room in self._hotel_data:                                                                                
+            print(f"{room._room_name}:    {room._states[room._current_status]}  -  {room._states[room._next_status]}  -  {room._states[room._after_status]}  -->  press {(self._hotel_data.index(room)) + 1}")
+            time.sleep(1)
+        try:
+            check = int(input("Return                                               press 0""\n"
+                               "                                                      -->  "))
+
+            if check > 0 and check <= len(self._hotel_data):
+                requested = self._hotel_data[check - 1]
+                returned = self._guests[requested._room_name]
+
+                stat_1_report = f"CURRENT STATUS  -  {requested._states[requested._current_status]}"
+                if requested._current_status > 0: 
+                    if isinstance(returned[0], Guest):
+                        stat_1_report += f"  -  {returned[0]._person_name[1]} {returned[0]._person_name[0]}\tpress 1"
+                    elif isinstance(returned[0], Employee):
+                        stat_1_report += f"  -  {returned[0]._employee_role}\tpress 1"    
+                else: stat_1_report += "\t\t\tpress 1"
+
+
+                stat_2_report = f"NEXT STATUS     -  {requested._states[requested._next_status]}"
+                if requested._next_status > 0: 
+                    if isinstance(returned[1], Guest):
+                        stat_2_report += f"  -  {returned[1]._person_name[1]} {returned[1]._person_name[0]}\tpress 2"
+                    elif isinstance(returned[1], Employee):
+                        stat_2_report += f"  -  {returned[1]._employee_role}\tpress 2"
+                else: stat_2_report += "\t\t\tpress 2"
+
+
+                stat_3_report = f"AFTER STATUS    -  {requested._states[requested._after_status]}"
+                if requested._after_status > 0: 
+                    if isinstance(returned[2], Guest):
+                        stat_3_report += f"  -  {returned[2]._person_name[1]} {returned[2]._person_name[0]}\tpress 3"
+                    elif isinstance(returned[2], Employee):
+                        stat_3_report += f"  -  {returned[2]._employee_role}\tpress 3"
+                else: stat_3_report += "\t\t\tpress 3"
+
+                time.sleep(1.5)
+                clear_console()
+                print(f"   {requested._room_name}\n{stat_1_report}\n{stat_2_report}\n{stat_3_report}")
+  ```
+  A modified version of `get_complete_status(self)`.
+
+
+  ```python
+  cancel_1 = int(input("Return                                          press 0""\n"
+                                           "                                                 -->  "))
+
+        if cancel_1 == 1:
+            status_update = f"{requested._room_name} CURRENT STATUS "
+
+            if requested._next_endline == 0 and requested._after_endline == 0:
+                self._guests[requested._room_name][0] = self._employees["Housekeeper"]
+                requested._current_status, requested._current_endline = 1, 1           
+                status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+            
+            else:
+                try:
+                    cancel_2 = int(input("To advance the schedule    press 1""\n"
+                                         "To conserve the schedule   press 2""\n"
+                                         "                            -->  "))
+
+                    if cancel_2 == 1:
+                        requested._current_status, requested._current_endline = requested._next_status, requested._next_endline
+                        self._guests[requested._room_name][0] = self._guests[requested._room_name][1]
+
+                        requested._next_status, requested._next_endline = requested._after_status, requested._after_endline
+                        self._guests[requested._room_name][1] = self._guests[requested._room_name][2]
+
+                        requested._after_status, requested._after_endline = 0, 0
+                        self._guests[requested._room_name][2] = self._employees["NOINFO"] 
+
+                        status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+
+                    elif cancel_2 == 2:
+                        requested._current_status = 6
+                        self._guests[requested._room_name][0] = self._employees["Front Desk Manager"]
+                        status_update += f"has been canceled.\n{requested._room_name} CURRENT STATUS is now {requested._states[requested._current_status]}.\n\n"
+
+                except IntInputError as error: 
+                    print(f"\n{error}, Returning.\n\n")
+                    time.sleep(2)
+                except ValueError: 
+                    print("\nPress numbers only, Returning.\n\n")
+                    time.sleep(2)
+
+
+        elif cancel_1 == 2:
+            status_update = f"{requested._room_name} NEXT STATUS "
+
+            if requested._after_endline == 0:
+                self._guests[requested._room_name][1] = self._employees["Housekeeper"]
+                requested._next_status, requested._next_endline = 1, 1           
+                status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+            
+            else:
+                try:
+                    cancel_2 = int(input("To advance the schedule    press 1""\n"
+                                         "To conserve the schedule   press 2""\n"
+                                         "                            -->  "))
+
+                    if cancel_2 == 1:
+                        requested._next_status, requested._next_endline = requested._after_status, requested._after_endline
+                        self._guests[requested._room_name][1] = self._guests[requested._room_name][2]
+
+                        requested._after_status, requested._after_endline = 0, 0
+                        self._guests[requested._room_name][2] = self._employees["NOINFO"] 
+
+                        status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+
+                    elif cancel_2 == 2:
+                        requested._next_status = 6
+                        self._guests[requested._room_name][1] = self._employees["Front Desk Manager"]
+                        status_update += f"has been canceled.\n{requested._room_name} NEXT STATUS is now {requested._states[requested._next_status]}.\n\n"
+
+                except IntInputError as error: 
+                    print(f"\n{error}, Returning.\n\n")
+                    time.sleep(2)
+                except ValueError: 
+                    print("\nPress numbers only, Returning.\n\n")
+                    time.sleep(2)
+
+
+        elif cancel_1 == 3:
+            status_update = f"{requested._room_name} AFTER STATUS "
+
+            self._guests[requested._room_name][2] = self._employees["Housekeeper"]
+            requested._after_status, requested._after_endline = 1, 1           
+            status_update += f"has been canceled.\n{requested._room_name} AFTER STATUS is now {requested._states[requested._after_status]}.\n\n"
+            
+        elif cancel_1 == 0: break
+        else: raise IntInputError(f"Press a number between 0 and 3")
+
+        print(status_update)
+        time.sleep(2)
+        break
+  ```
+  This section handles the proper cancelling protocol, it enables the user to advance or conserve the posterior room schedule.
+
+  
+</p>
+</details>    
+
+
+- `get_daily_report(self, date)`
+<details><summary>Details</summary>
+<p>
+  
+  ```python
+  today_name = date.strftime("%Y_%m_%d")
+    today_file = date.strftime("%A, %B %d, %Y")
+    file = f"KAIROS_REPORT_{today_name}.txt"
+
+    with open(file, 'w') as report:
+        report.write(f"PYLONE TEAM HOTEL MANAGEMENT SOLUTION\nKAIROS HOTEL SYSTEM\n\n{today_file}\n")
+        for room in self._hotel_data:
+            endlines = [room._current_endline, room._current_endline + room._next_endline, room._current_endline + room._next_endline + room._after_endline]
+            dates = [(date + timedelta(days=endline)).strftime("%a %b %d %Y") for endline in endlines]
+            current_date, next_date, after_date = dates
+
+            assigned = self._guests[room._room_name]
+
+            stat_1_report = f"CURRENT STATUS  -  {room._states[room._current_status]}"
+            if room._current_status > 0: 
+                if isinstance(assigned[0], Guest):
+                    stat_1_report += f"  BY  {assigned[0]._person_name[1]} {assigned[0]._person_name[0]} - {assigned[0]._person_phone}  UNTIL  {current_date}"
+                elif isinstance(assigned[0], Employee):
+                    stat_1_report += f"  BY  {assigned[0]._employee_role} - {assigned[0]._person_name[1]} {assigned[0]._person_name[0]}  UNTIL  {current_date}"    
+            else: pass
+
+            stat_2_report = f"NEXT STATUS     -  {room._states[room._next_status]}"
+            if room._next_status > 0: 
+                if isinstance(assigned[1], Guest):
+                    stat_2_report += f"  BY  {assigned[1]._person_name[1]} {assigned[1]._person_name[0]} - {assigned[1]._person_phone}  UNTIL  {next_date}"
+                elif isinstance(assigned[1], Employee):
+                    stat_2_report += f"  BY  {assigned[1]._employee_role} - {assigned[1]._person_name[1]} {assigned[1]._person_name[0]}  UNTIL  {next_date}"
+            else: pass
+
+            stat_3_report = f"AFTER STATUS    -  {room._states[room._after_status]}"
+            if room._after_status > 0: 
+                if isinstance(assigned[2], Guest):
+                    stat_3_report += f"  BY  {assigned[2]._person_name[1]} {assigned[2]._person_name[0]} - {assigned[2]._person_phone}  UNTIL  {after_date}"
+                elif isinstance(assigned[2], Employee):
+                    stat_3_report += f"  BY  {assigned[2]._employee_role} - {assigned[2]._person_name[1]} {assigned[2]._person_name[0]}  UNTIL  {after_date}"
+            else: pass
+
+            report.write(f"\n   {room._room_name}\n{stat_1_report}\n{stat_2_report}\n{stat_3_report}\n")
+
+    return f"{file}, created"
+  ```
+  Once again a modified version of `get_complete_status(self)`, however,  instead of printing to the console, it writes it to a plain text file, is minded for a daily use: `KAIROS_REPORT_<YYYY_MM_DD>.txt`.
+
+</p>
+</details>
+
+
+
+## **The `main.py` file**
+### The `main()`
+```python
+import json
+from datetime import datetime, timedelta
+from kairos_packages.hotel import Hotel
+from kairos_packages.exception import IntInputError
+
+def main():
+    with open('KAIROS_data.json', 'r+') as json_file:
+        hotel_data = json.load(json_file)
+        KAIROS = Hotel.from_dict(hotel_data)
+
+        print("\nPYLONE TEAM HOTEL MANAGEMENT SOLUTION\nKAIROS HOTEL SYSTEM")
+        date = datetime.now()
+        
+        while True:
+            try:
+                print(date.strftime("%B %d, %Y"))
+                program = int(input("\n""          OPTIONS                TO GO" "\n"
+                                    "Current Status of the Hotel     press 1" "\n"
+                                    "Complete Status of the Hotel    press 2" "\n"
+                                    "Check Room Status               press 3" "\n"
+                                    "Specific Tasks                  press 4" "\n"
+                                    "Cancel Scheduling               press 5" "\n"
+                                    "Generate Report                 press 6" "\n"
+                                    "End the Day                     press 7" "\n"
+                                    "Exit                            press 0" "\n"
+                                    "                                 -->  "))
+                    
+                if program == 0: break 
+
+                elif program == 1:
+                    KAIROS.get_current_status()
+
+                elif program == 2:
+                    KAIROS.get_complete_status()
+                        
+                elif program == 3:
+                    KAIROS.sunrise_protocol()
+
+                elif program == 4:
+                    KAIROS.noon_protocol()
+
+                elif program == 5:
+                    KAIROS.midnight_protocol()
+
+                elif program == 6:
+                    KAIROS.get_daily_report(date)
+
+                elif program == 7:
+                    KAIROS_data = KAIROS.to_dict()    
+                    json_file.seek(0)
+                    json.dump(KAIROS_data, json_file, indent=4)
+                    json_file.truncate()
+                    KAIROS.sunset_protocol()
+                    date = date + timedelta(days=1)
+
+                else: raise IntInputError("Press a number between 0 and 6, Returning.")
+                
+            except IntInputError as error: print(f"\n{error}\n\n")
+            except ValueError: print("\nPress numbers only, Returning.\n\n")
+
+if __name__ == "__main__": 
+    main()
+```
+A very simple file, with a `while` loop, that allows to interact continuously with `program` `int(input())`, it has the "main menu" as the argument, note the handling of `datetime` objects.
+
+
 ## What's Next?
-- In code definitions of `to_dict` and `from_dict` methods
-- New `Room` class method related to cancel scheduling.
-- Integrate the `Room` class methods to modify the `Hotel.guests` dict.
-- Establish the **json** version of `KAIROS` as the only version.
-- Create an `Exception` class.
-- What the feedback indicates
+- An `Hotel` method to create an `Hotel` object from scratch.
+- An `Hotel` method to add or eliminate `Room` objects from it.
